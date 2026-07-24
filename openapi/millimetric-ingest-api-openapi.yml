@@ -1,0 +1,229 @@
+openapi: 3.1.0
+info:
+  title: Millimetric Analytics Identity Ingest API
+  version: v1
+  description: API-first, privacy-respecting analytics for developers, small startups, and AI agents. Capture events, identify users, run GDPR deletes, and query aggregated stats and attribution — no cookies, no dashboards required. All access is via Bearer API keys (pk_/sk_/rk_/ak_ kinds). Endpoints are versioned under /v1/*.
+  contact:
+    name: Millimetric Support
+    email: hello@millimetric.ai
+    url: https://docs.millimetric.ai
+  x-apievangelist-generated: true
+servers:
+- url: https://api.millimetric.ai
+  description: Production
+tags:
+- name: Ingest
+  description: Write events into a project.
+paths:
+  /v1/track:
+    post:
+      operationId: trackEvent
+      summary: Emit a single analytics event
+      description: Emit a single analytics event — the most common write endpoint. Requires an ingest-scope key (pk_* browser, origin-checked; or sk_* server). The server enriches every event with source/medium classification, geo, device, and a hashed IP before insert.
+      tags:
+      - Ingest
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackEventInput'
+            example:
+              event: purchase
+              event_id: evt_abc123
+              anonymous_id: u_abc
+              user_id: user_42
+              properties:
+                amount_cents: 4900
+                currency: usd
+      responses:
+        '202':
+          description: Accepted — event written to ClickHouse synchronously.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  event_id:
+                    type: string
+              example:
+                ok: true
+                event_id: evt_abc123
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /v1/batch:
+    post:
+      operationId: batchEvents
+      summary: Emit up to 1000 events in one call
+      description: Send up to 1000 events in a single request. All-or-nothing at the request level — if validation fails on any event, none are written. Used by the browser SDK for buffered flushes. Requires an ingest-scope key (pk_* or sk_*).
+      tags:
+      - Ingest
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchInput'
+      responses:
+        '202':
+          description: Accepted — all events written.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  count:
+                    type: integer
+              example:
+                ok: true
+                count: 2
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+components:
+  responses:
+    Forbidden:
+      description: 403 — origin_not_allowed / insufficient_scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: insufficient_scope
+    Unauthorized:
+      description: 401 — missing or invalid Bearer key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_api_key
+    RateLimited:
+      description: 429 rate_limited — token bucket exhausted. Retry-After header included.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: rate_limited
+            retry_after_s: 1
+    ServerError:
+      description: 500 internal_error / 502 upstream_failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: internal_error
+    InvalidPayload:
+      description: 400 invalid_payload — body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_payload
+            details:
+              fieldErrors:
+                event:
+                - Required
+  schemas:
+    TrackEventInput:
+      type: object
+      required:
+      - event
+      properties:
+        event:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Event name. $-prefix reserved for system events.
+        event_id:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Idempotency / join key.
+        timestamp:
+          type: string
+          format: date-time
+        anonymous_id:
+          type: string
+          minLength: 1
+          maxLength: 128
+        user_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+        session_id:
+          type: string
+          minLength: 1
+          maxLength: 128
+        url:
+          type: string
+          maxLength: 2048
+        path:
+          type: string
+          maxLength: 2048
+        referrer:
+          type: string
+          maxLength: 2048
+        properties:
+          type: object
+          additionalProperties: true
+          description: Free-form JSON
+          capped at 8 KB stringified.: null
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: Stable machine-readable error code.
+        details:
+          type: object
+          additionalProperties: true
+    BatchInput:
+      type: object
+      required:
+      - events
+      properties:
+        events:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/TrackEventInput'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key of the form {kind}_{env}_{prefix}_{secret}. Kinds: pk_ (browser, ingest, origin-allowlisted), sk_ (server, ingest+read), rk_ (read only, recommended for agents/MCP), ak_ (account-level read across projects, Business tier).'

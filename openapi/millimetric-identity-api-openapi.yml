@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: Millimetric Analytics Identity API
+  version: v1
+  description: API-first, privacy-respecting analytics for developers, small startups, and AI agents. Capture events, identify users, run GDPR deletes, and query aggregated stats and attribution — no cookies, no dashboards required. All access is via Bearer API keys (pk_/sk_/rk_/ak_ kinds). Endpoints are versioned under /v1/*.
+  contact:
+    name: Millimetric Support
+    email: hello@millimetric.ai
+    url: https://docs.millimetric.ai
+  x-apievangelist-generated: true
+servers:
+- url: https://api.millimetric.ai
+  description: Production
+tags:
+- name: Identity
+  description: Link anonymous visitors to known users and honor deletion requests.
+paths:
+  /v1/identify:
+    post:
+      operationId: identify
+      summary: Link an anonymous_id to a user_id
+      description: Bind a known user_id to a visitor's anonymous_id. Persists as a special $identify event so pre- and post-login behavior can be stitched together. Requires an ingest-scope key (pk_* or sk_*).
+      tags:
+      - Identity
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentifyInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/forget:
+    post:
+      operationId: forget
+      summary: GDPR delete for a user
+      description: Permanently delete every event for (project_id, user_id). Intended for GDPR / CCPA Right-to-be-Forgotten. sk_* keys only — pk_* is explicitly rejected to prevent a leaked browser key from wiping data.
+      tags:
+      - Identity
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgetInput'
+      responses:
+        '200':
+          description: Deletion queued on ClickHouse.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  queued:
+                    type: boolean
+              example:
+                ok: true
+                queued: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: forget_requires_secret_key — a pk_* key was used.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: forget_requires_secret_key
+        '500':
+          description: forget_failed — ClickHouse rejected the mutation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: forget_failed
+components:
+  responses:
+    Forbidden:
+      description: 403 — origin_not_allowed / insufficient_scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: insufficient_scope
+    Unauthorized:
+      description: 401 — missing or invalid Bearer key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_api_key
+    InvalidPayload:
+      description: 400 invalid_payload — body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_payload
+            details:
+              fieldErrors:
+                event:
+                - Required
+  schemas:
+    IdentifyInput:
+      type: object
+      required:
+      - anonymous_id
+      - user_id
+      properties:
+        anonymous_id:
+          type: string
+          minLength: 1
+          maxLength: 128
+        user_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+        traits:
+          type: object
+          additionalProperties: true
+    ForgetInput:
+      type: object
+      required:
+      - user_id
+      properties:
+        user_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: Stable machine-readable error code.
+        details:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key of the form {kind}_{env}_{prefix}_{secret}. Kinds: pk_ (browser, ingest, origin-allowlisted), sk_ (server, ingest+read), rk_ (read only, recommended for agents/MCP), ak_ (account-level read across projects, Business tier).'

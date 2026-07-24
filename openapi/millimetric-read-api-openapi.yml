@@ -1,0 +1,348 @@
+openapi: 3.1.0
+info:
+  title: Millimetric Analytics Identity Read API
+  version: v1
+  description: API-first, privacy-respecting analytics for developers, small startups, and AI agents. Capture events, identify users, run GDPR deletes, and query aggregated stats and attribution — no cookies, no dashboards required. All access is via Bearer API keys (pk_/sk_/rk_/ak_ kinds). Endpoints are versioned under /v1/*.
+  contact:
+    name: Millimetric Support
+    email: hello@millimetric.ai
+    url: https://docs.millimetric.ai
+  x-apievangelist-generated: true
+servers:
+- url: https://api.millimetric.ai
+  description: Production
+tags:
+- name: Read
+  description: Query raw events and aggregated stats and attribution.
+paths:
+  /v1/query:
+    get:
+      operationId: queryEvents
+      summary: Return raw events filtered by time range
+      description: Return raw event rows matching a time range and optional filters. For debugging, ad-hoc inspection, and small reports. Requires a read-scope key (rk_*).
+      tags:
+      - Read
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        description: ISO 8601 timestamp (inclusive).
+      - name: to
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        description: ISO 8601 timestamp (exclusive).
+      - name: event
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter to one event name.
+      - name: source
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter to one source.
+      - name: medium
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter to one medium.
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter to events tagged with this user_id.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      responses:
+        '200':
+          description: Matching event rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rows:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventRow'
+        '400':
+          $ref: '#/components/responses/InvalidParams'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/stats:
+    get:
+      operationId: getStats
+      summary: Aggregations over events
+      description: Aggregate counts or unique-visitor counts (HyperLogLog) over a time range, optionally grouped and/or time-bucketed. Requires a read-scope key (rk_*).
+      tags:
+      - Read
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: metric
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - count
+          - uniques
+          default: count
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: event
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: group_by
+        in: query
+        required: false
+        description: 'Comma-separated columns. Allowed: event_name, source, medium, country, device_type, browser, os, path.'
+        schema:
+          type: string
+      - name: interval
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - hour
+          - day
+          - week
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      responses:
+        '200':
+          description: Aggregated rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metric:
+                    type: string
+                  rows:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+              example:
+                metric: count
+                rows:
+                - source: facebook
+                  medium: paid
+                  value: 6
+                - source: facebook
+                  medium: social
+                  value: 3
+        '400':
+          $ref: '#/components/responses/InvalidParams'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/sources:
+    get:
+      operationId: getSources
+      summary: Top sources/mediums with the paid-vs-social split
+      description: Top sources (and optionally source x medium) for the project — the endpoint that surfaces the Facebook social-vs-paid split. Requires a read-scope key (rk_*).
+      tags:
+      - Read
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: breakdown
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - source_medium
+          - source
+          default: source_medium
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+      responses:
+        '200':
+          description: Top-source rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  breakdown:
+                    type: string
+                  rows:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                        medium:
+                          type: string
+                        events:
+                          type: integer
+                        uniques:
+                          type: integer
+                        paid_share:
+                          type: number
+              example:
+                breakdown: source_medium
+                rows:
+                - source: facebook
+                  medium: paid
+                  events: 6
+                  uniques: 6
+                  paid_share: 1.0
+                - source: facebook
+                  medium: social
+                  events: 3
+                  uniques: 3
+                  paid_share: 0.0
+        '400':
+          $ref: '#/components/responses/InvalidParams'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  responses:
+    Forbidden:
+      description: 403 — origin_not_allowed / insufficient_scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: insufficient_scope
+    Unauthorized:
+      description: 401 — missing or invalid Bearer key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_api_key
+    InvalidParams:
+      description: 400 invalid_params / invalid_group_by — query string failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_params
+  schemas:
+    EventRow:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        event_name:
+          type: string
+        anonymous_id:
+          type: string
+        user_id:
+          type: string
+          nullable: true
+        source:
+          type: string
+        medium:
+          type: string
+        campaign:
+          type: string
+          nullable: true
+        source_confidence:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+        referrer:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+        country:
+          type: string
+        device_type:
+          type: string
+        properties:
+          type: string
+          description: JSON-encoded string.
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: Stable machine-readable error code.
+        details:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key of the form {kind}_{env}_{prefix}_{secret}. Kinds: pk_ (browser, ingest, origin-allowlisted), sk_ (server, ingest+read), rk_ (read only, recommended for agents/MCP), ak_ (account-level read across projects, Business tier).'
