@@ -1,25 +1,171 @@
 aid: millimetric
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/millimetric.png
 name: Millimetric
-description: Millimetric is a company surfaced as a portfolio company of seedcamp and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Millimetric is API-first, privacy-respecting web and product analytics for developers,
+  indie startups ("vibe coders"), and AI agents. It captures events over a simple REST API
+  (/v1/track, /v1/batch, /v1/identify, /v1/query, /v1/stats, /v1/sources), a ~1.8 KB browser
+  SDK, and a zero-dependency Node SDK, with a built-in attribution classifier that splits
+  paid versus organic social traffic (the Facebook social-vs-paid split). It stores no
+  cookies and no raw IPs — GDPR/CCPA compliant, with a /v1/forget right-to-be-forgotten
+  endpoint — and ships a first-class hosted Model Context Protocol (MCP) server so AI agents
+  emit and query analytics natively. Backed by Seedcamp.
 url: https://raw.githubusercontent.com/api-evangelist/millimetric/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - seedcamp
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: real-api-surface
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
-apis: []
+- Analytics
+- Web Analytics
+- Product Analytics
+- Attribution
+- Privacy
+- MCP
+- AI Agents
+- Events
+- Developer Tools
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
+apis:
+- aid: millimetric:millimetric-identity-api
+  name: Millimetric Identity API
+  description: Link anonymous visitors to known users and honor deletion requests.
+  humanURL: https://docs.millimetric.ai/api-reference/overview
+  baseURL: https://api.millimetric.ai
+  tags:
+  - Identity
+  properties:
+  - type: OpenAPI
+    url: openapi/millimetric-identity-api-openapi.yml
+  - type: Documentation
+    url: https://docs.millimetric.ai
+  - type: APIReference
+    url: https://docs.millimetric.ai/api-reference/overview
+- aid: millimetric:millimetric-ingest-api
+  name: Millimetric Ingest API
+  description: Write events into a project.
+  humanURL: https://docs.millimetric.ai/api-reference/overview
+  baseURL: https://api.millimetric.ai
+  tags:
+  - Ingest
+  properties:
+  - type: OpenAPI
+    url: openapi/millimetric-ingest-api-openapi.yml
+  - type: Documentation
+    url: https://docs.millimetric.ai
+  - type: APIReference
+    url: https://docs.millimetric.ai/api-reference/overview
+- aid: millimetric:millimetric-read-api
+  name: Millimetric Read API
+  description: Query raw events and aggregated stats and attribution.
+  humanURL: https://docs.millimetric.ai/api-reference/overview
+  baseURL: https://api.millimetric.ai
+  tags:
+  - Read
+  properties:
+  - type: OpenAPI
+    url: openapi/millimetric-read-api-openapi.yml
+  - type: Documentation
+    url: https://docs.millimetric.ai
+  - type: APIReference
+    url: https://docs.millimetric.ai/api-reference/overview
 common:
 - type: Website
-  url: http://millimetric.ai
+  url: https://millimetric.ai
+- type: DeveloperPortal
+  url: https://docs.millimetric.ai
+- type: Documentation
+  url: https://docs.millimetric.ai
+- type: APIReference
+  url: https://docs.millimetric.ai/api-reference/overview
+- type: GettingStarted
+  url: https://docs.millimetric.ai/quickstart
+- type: Support
+  url: mailto:hello@millimetric.ai
+- type: Pricing
+  url: https://millimetric.ai/#pricing
+- type: SignUp
+  url: https://millimetric.ai/signup
+- type: Login
+  url: https://millimetric.ai/login
+- type: TermsOfService
+  url: https://millimetric.ai/legal/terms
+- type: PrivacyPolicy
+  url: https://millimetric.ai/legal/privacy
+- type: StatusPage
+  url: https://status.millimetric.ai
+- type: OpenAPI
+  url: openapi/millimetric-openapi.yml
+- type: MCPServer
+  url: mcp/millimetric-mcp.yml
+- type: LLMsTxt
+  url: llms/millimetric-llms.txt
+- type: Authentication
+  url: authentication/millimetric-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/millimetric-agentic-access.yml
+- type: DomainSecurity
+  url: security/millimetric-domain-security.yml
+- type: Conventions
+  url: conventions/millimetric-conventions.yml
+- type: Idempotency
+  url: conventions/millimetric-conventions.yml
+- type: ErrorCatalog
+  url: errors/millimetric-error-codes.yml
+- type: RateLimits
+  url: rate-limits/millimetric-rate-limits.yml
+- type: Plans
+  url: plans/millimetric-plans.yml
+- type: Lifecycle
+  url: lifecycle/millimetric-lifecycle.yml
+- type: Packages
+  url: packages/millimetric-packages.yml
+- type: SDKs
+  url: packages/millimetric-packages.yml
+- type: Conformance
+  url: conformance/millimetric-conformance.yml
+- type: Compliance
+  url: https://millimetric.ai/legal/dpa
+- type: DataModel
+  url: data-model/millimetric-data-model.yml
+- type: Overlay
+  url: overlays/millimetric-openapi-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Arazzo
+  name: Capture an event and analyze traffic sources
+  url: arazzo/millimetric-capture-and-analyze.yml
+- type: Arazzo
+  name: Stitch an anonymous visitor to a known user
+  url: arazzo/millimetric-anonymous-to-known.yml
+- type: Arazzo
+  name: GDPR right-to-be-forgotten
+  url: arazzo/millimetric-gdpr-delete.yml
