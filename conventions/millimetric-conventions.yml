@@ -1,0 +1,71 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.millimetric.ai/api-reference/overview.md
+description: >-
+  Cross-cutting request/response semantics for the Millimetric Analytics API, captured from
+  the published API reference and derived from the OpenAPI. Cross-links errors/, lifecycle/,
+  authentication/, and rate-limits/.
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer {kind}_{env}_{prefix}_{secret}'
+  key_kinds: [pk_, sk_, rk_, ak_]
+  origin_allowlist: pk_* keys must send an Origin header in the project's allowed_origins.
+  see: authentication/millimetric-authentication.yml
+idempotency:
+  supported: true
+  mechanism: event_id
+  location: request body field (per event; also per-element in /v1/batch)
+  scope: 1-128 char caller-supplied key
+  server_side_dedup: false
+  note: >-
+    event_id is documented as an idempotency / join key, but the server does NOT deduplicate
+    at the database today — sending the same event_id twice still inserts a row. True
+    server-side deduplication is on the roadmap. Use event_id as a stable identifier for
+    joining with your own systems and for idempotent replays you control.
+  docs: https://docs.millimetric.ai/api-reference/overview.md
+pagination:
+  style: limit-only
+  params:
+    limit: { min: 1, max: 1000, default: 100, endpoints: [/v1/query, /v1/stats] }
+  sources_limit: { min: 1, max: 200, default: 50, endpoint: /v1/sources }
+  cursor: false
+  offset: false
+  note: No cursor or offset pagination; bound results with limit + a from/to time window.
+time_range:
+  params: [from, to]
+  format: ISO 8601
+  semantics: from inclusive, to exclusive
+error_envelope:
+  format: custom-json
+  shape: '{ "error": "<stable_code>", "details": {...} }'
+  contract: The string error code is the contract; the human message is not.
+  http_status: aligned (400/401/403/429/500/502)
+  see: errors/millimetric-error-codes.yml
+rate_limit_signal:
+  status: 429
+  code: rate_limited
+  header: 'Retry-After: <seconds>'
+  body_field: retry_after_s
+  scope: per project, per route (in-memory token bucket)
+  see: rate-limits/millimetric-rate-limits.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  policy: Additive changes happen in place; breaking changes appear under /v2/*.
+  see: lifecycle/millimetric-lifecycle.yml
+request_tracing:
+  request_id_header: none-documented
+metadata:
+  field: properties
+  shape: free-form JSON, capped at 8 KB after JSON.stringify
+content_type: application/json (write endpoints); query-string params for read endpoints
+server_enrichment:
+  note: >-
+    The server adds source/medium/campaign/source_confidence classification, country
+    (geo-IP), device_type/browser/os (User-Agent), and a hashed IP to every event. Any of
+    these supplied by the client are ignored.
+privacy:
+  cookies: none
+  raw_ip_stored: false
+  pii: not accepted (email/name/address should not be sent)
+  gdpr_ccpa: supported via POST /v1/forget

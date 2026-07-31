@@ -1,0 +1,31 @@
+generated: '2026-07-20'
+method: searched
+source: https://millimetric.ai/#pricing
+description: >-
+  Millimetric pricing tiers, captured from the marketing site. Usage-metered on events per
+  month with tiered data retention. MCP (single-project) requires Pro+; account-level MCP
+  requires Business.
+currency: usd
+billing: per month
+plans:
+  - name: Free
+    price: 0
+    events_per_month: 100000
+    retention_days: 30
+    highlights:
+      - API + browser/Node SDKs
+      - Attribution classifier (paid-vs-social split)
+  - name: Pro
+    price: 19
+    events_per_month: 1000000
+    retention_days: 90
+    highlights:
+      - Everything in Free
+      - Single-project MCP server (/mcp)
+  - name: Business
+    price: 99
+    events_per_month: 10000000
+    retention_days: 365
+    highlights:
+      - Everything in Pro
+      - Account-level MCP (/mcp/account) with ak_ keys, list_projects, compare_projects

@@ -1,0 +1,70 @@
+arazzo: 1.0.1
+info:
+  title: Stitch an anonymous visitor to a known user
+  version: 1.0.0
+  summary: Track anonymously, identify on login, tag subsequent events, then read the user's history.
+sourceDescriptions:
+  - name: millimetric
+    url: ../openapi/millimetric-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: anonymous-to-known
+    summary: track (anon) -> identify -> track (known) -> query by user_id.
+    inputs:
+      type: object
+      required: [sk_key, rk_key, anonymous_id, user_id, from, to]
+      properties:
+        sk_key: { type: string }
+        rk_key: { type: string }
+        anonymous_id: { type: string, default: u_demo }
+        user_id: { type: string, default: user_42 }
+        from: { type: string }
+        to: { type: string }
+    steps:
+      - stepId: track-anon
+        operationId: trackEvent
+        parameters:
+          - { name: Authorization, in: header, value: "Bearer $inputs.sk_key" }
+        requestBody:
+          contentType: application/json
+          payload:
+            event: "$pageview"
+            anonymous_id: $inputs.anonymous_id
+        successCriteria:
+          - condition: $statusCode == 202
+      - stepId: identify
+        operationId: identify
+        parameters:
+          - { name: Authorization, in: header, value: "Bearer $inputs.sk_key" }
+        requestBody:
+          contentType: application/json
+          payload:
+            anonymous_id: $inputs.anonymous_id
+            user_id: $inputs.user_id
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: track-known
+        operationId: trackEvent
+        parameters:
+          - { name: Authorization, in: header, value: "Bearer $inputs.sk_key" }
+        requestBody:
+          contentType: application/json
+          payload:
+            event: activated
+            anonymous_id: $inputs.anonymous_id
+            user_id: $inputs.user_id
+        successCriteria:
+          - condition: $statusCode == 202
+      - stepId: query-user
+        operationId: queryEvents
+        parameters:
+          - { name: Authorization, in: header, value: "Bearer $inputs.rk_key" }
+          - { name: from, in: query, value: $inputs.from }
+          - { name: to, in: query, value: $inputs.to }
+          - { name: user_id, in: query, value: $inputs.user_id }
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          rows: $response.body#/rows
+    outputs:
+      user_events: $steps.query-user.outputs.rows

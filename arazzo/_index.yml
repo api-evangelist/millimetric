@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/millimetric-openapi.yml
+workflows:
+  - file: millimetric-capture-and-analyze.yml
+    workflowId: capture-and-analyze
+    title: Capture an event and analyze traffic sources
+    summary: Emit an event, then pull aggregate stats and the paid-vs-social attribution split.
+  - file: millimetric-anonymous-to-known.yml
+    workflowId: anonymous-to-known
+    title: Stitch an anonymous visitor to a known user
+    summary: Track anonymously, identify on login, tag subsequent events, then read the user's history.
+  - file: millimetric-gdpr-delete.yml
+    workflowId: gdpr-delete
+    title: GDPR right-to-be-forgotten
+    summary: Confirm a user's events, then permanently delete them with a secret key.

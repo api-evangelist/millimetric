@@ -1,0 +1,69 @@
+generated: '2026-07-20'
+method: searched
+status: published
+source: https://docs.millimetric.ai/mcp-for-ai-agents/overview.md
+description: >-
+  Millimetric ships a first-class, hosted Model Context Protocol server. Any MCP client
+  (Claude Code, Claude Desktop, MCP Inspector, custom agents) connects with a server-side
+  key and uses the same operations a developer would. Two endpoints: /mcp (single project)
+  and /mcp/account (multi-project, Business tier).
+servers:
+  - name: millimetric
+    transport: http
+    protocol: JSON-RPC 2.0 over HTTP
+    url: https://api.millimetric.ai/mcp
+    scope: One project per key.
+    auth: Bearer rk_live_* (read) or sk_live_* (read+ingest). pk_/ak_ keys rejected (403 key_kind_not_allowed).
+    plan: Pro+
+  - name: millimetric-account
+    transport: http
+    protocol: JSON-RPC 2.0 over HTTP
+    url: https://api.millimetric.ai/mcp/account
+    scope: Every project the account owns. Adds list_projects and compare_projects.
+    auth: Bearer ak_live_* only (403 account_key_required otherwise).
+    plan: Business
+tools:
+  - name: track_event
+    description: Emit an event (requires ingest scope, sk_* key).
+    source_operation: openapi/millimetric-openapi.yml#trackEvent
+  - name: query_events
+    description: Return raw events for a time range and optional filters (requires read).
+    source_operation: openapi/millimetric-openapi.yml#queryEvents
+  - name: get_stats
+    description: Aggregations (count / uniques) over events (requires read).
+    source_operation: openapi/millimetric-openapi.yml#getStats
+  - name: top_sources
+    description: Top sources/mediums including the FB social-vs-paid split (requires read).
+    source_operation: openapi/millimetric-openapi.yml#getSources
+account_tools:
+  - name: list_projects
+    description: Every project the ak_ key can read. Account MCP only.
+  - name: compare_projects
+    description: Rank every accessible project by a single metric. Account MCP only.
+resources:
+  - uri: events://recent
+    description: Last 100 events for the authenticated project.
+  - uri: schema://events
+    description: Distinct event names observed in the last 30 days.
+  - uri: projects://all
+    description: Every project the ak_ key can read (account MCP).
+errors:
+  envelope: JSON-RPC 2.0 error object
+  codes:
+    - { code: -32600, meaning: invalid_request }
+    - { code: -32601, meaning: method_not_found }
+    - { code: -32602, meaning: unknown_tool / unknown_resource / unhandled_tool }
+    - { code: -32000, meaning: tool_failed / insufficient_scope }
+    - { code: -32002, meaning: plan_limit (feature requires higher tier) }
+    - { code: -32004, meaning: unknown_project_id / unknown_project_slug (account MCP) }
+    - { code: -32005, meaning: no_projects_visible (account MCP) }
+client_config_example: |
+  {
+    "mcpServers": {
+      "millimetric": {
+        "url": "https://api.millimetric.ai/mcp",
+        "transport": "http",
+        "headers": { "Authorization": "Bearer rk_live_..." }
+      }
+    }
+  }

@@ -1,0 +1,18 @@
+generated: '2026-07-20'
+method: searched
+source: live probes 2026-07-20
+description: >-
+  Probe of the /.well-known/ discovery surface on the Millimetric hosts. No well-known
+  documents were found (all 404). Recorded as honest none-results. Consistent with the
+  API's Bearer-key auth model (no OIDC/OAuth discovery) and no published security.txt.
+hosts:
+  - host: https://api.millimetric.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+  - host: https://millimetric.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }

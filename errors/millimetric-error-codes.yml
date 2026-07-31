@@ -1,0 +1,101 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.millimetric.ai/reference/errors.md
+description: >-
+  Full error-code registry for the Millimetric Analytics API. Every error is a JSON
+  response with a stable string `error` field and an HTTP status code — the string is the
+  contract, the human-readable message is not. This is the REST/HTTP catalog; MCP errors
+  use JSON-RPC codes (see mcp/millimetric-mcp.yml).
+format: custom-json
+envelope: '{ "error": "<code>", "details": {...} }'
+errors:
+  - status: 400
+    code: invalid_payload
+    area: validation
+    meaning: Body failed Zod validation. details.fieldErrors is the flattened tree.
+    remediation: 'Inspect details. Common causes: event missing, properties > 8 KB, malformed url.'
+  - status: 400
+    code: invalid_params
+    area: validation
+    meaning: Query string failed validation.
+    remediation: Check from/to are ISO-8601 and metric is count or uniques.
+  - status: 400
+    code: invalid_group_by
+    area: validation
+    meaning: Unknown column passed to the stats group_by parameter. Response includes the allowed list.
+    remediation: 'Use only these columns: event_name, source, medium, country, device_type, browser, os, path.'
+  - status: 401
+    code: missing_bearer_token
+    area: auth
+    meaning: No Authorization header.
+    remediation: Send Authorization Bearer {key}.
+  - status: 401
+    code: malformed_api_key
+    area: auth
+    meaning: Key does not match the (pk/sk/rk/ak)_env_prefix_secret shape.
+    remediation: Copy the full key from the dashboard.
+  - status: 401
+    code: invalid_api_key
+    area: auth
+    meaning: No matching key in the database, or HMAC does not verify.
+    remediation: Mint a new key. Old one was revoked or never existed.
+  - status: 401
+    code: key_kind_mismatch
+    area: auth
+    meaning: Stored key has a different kind than the prefix claims.
+    remediation: Re-mint. Likely a copy-paste from another row.
+  - status: 401
+    code: invalid_session
+    area: auth
+    meaning: Admin endpoint - user JWT failed Supabase validation.
+    remediation: Sign in again.
+  - status: 403
+    code: origin_not_allowed
+    area: auth
+    meaning: pk_* key from an origin not in the project allowed_origins.
+    remediation: Add the origin in the dashboard, or use sk_* server-side.
+  - status: 403
+    code: insufficient_scope
+    area: auth
+    meaning: Read endpoint called with pk_*/sk_*, or write endpoint with rk_*.
+    remediation: 'Use a key with the right scope: pk_/sk_ for ingest, rk_ for read.'
+  - status: 403
+    code: forget_requires_secret_key
+    area: auth
+    meaning: /v1/forget called with a pk_* key.
+    remediation: Use sk_*. Browser keys are rejected to prevent leak-induced wipes.
+  - status: 403
+    code: key_kind_not_allowed
+    area: auth
+    meaning: pk_ or ak_ key used against /mcp.
+    remediation: Use rk_/sk_ for /mcp; ak_ only for /mcp/account.
+  - status: 403
+    code: account_key_required
+    area: auth
+    meaning: Non-ak_ key used against /mcp/account.
+    remediation: Use an ak_ (account) key, Business tier.
+  - status: 429
+    code: rate_limited
+    area: rate-limit
+    meaning: Token bucket exhausted for this project and route. Retry-After header present.
+    remediation: Back off Retry-After seconds, then retry. For sustained writes switch to /v1/batch.
+  - status: 500
+    code: internal_error
+    area: server
+    meaning: Unhandled exception. Worker logs have the trace.
+    remediation: Retry once with jitter. If persistent, check wrangler tail.
+  - status: 500
+    code: forget_failed
+    area: server
+    meaning: ClickHouse rejected the delete mutation.
+    remediation: Check Worker logs. Likely a transient ClickHouse issue.
+  - status: 502
+    code: upstream_failed
+    area: server
+    meaning: Could not reach ClickHouse or Supabase.
+    remediation: Retry with exponential backoff.
+retry_guidance:
+  '4xx': 'No — the payload is wrong, fix it.'
+  '429': 'Yes — honour Retry-After; use /v1/batch for sustained writes.'
+  '5xx': 'Yes — exponential backoff (Node SDK does 100/200/400/800 ms).'
+  network: 'Yes — same as 5xx.'

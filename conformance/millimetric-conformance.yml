@@ -1,0 +1,44 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/millimetric-openapi.yml, https://docs.millimetric.ai/core-concepts/privacy.md, https://millimetric.ai/legal/dpa
+description: >-
+  Cross-cutting standards and compliance posture for the Millimetric Analytics API, derived
+  from the OpenAPI and docs and confirmed against the published legal/privacy pages.
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: Auth is Bearer API keys (pk_/sk_/rk_/ak_), not OAuth2. No securityScheme of type oauth2.
+  - id: oidc
+    conforms: false
+    evidence: No /.well-known/openid-configuration (probe returned 404).
+  - id: bearer-token-auth
+    conforms: true
+    evidence: HTTP bearer securityScheme; Authorization Bearer {key} on every endpoint.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a custom JSON envelope ({error, details}), not application/problem+json.
+  - id: rest-json
+    conforms: true
+    evidence: JSON request/response bodies; query-string params for read endpoints.
+  - id: rate-limiting-retry-after
+    conforms: true
+    evidence: 429 rate_limited with RFC 7231 Retry-After header.
+  - id: mcp
+    conforms: true
+    evidence: First-class hosted MCP server at /mcp and /mcp/account (JSON-RPC 2.0 over HTTP).
+  - id: gdpr
+    conforms: true
+    evidence: POST /v1/forget right-to-be-forgotten; DPA published at /legal/dpa; no PII/cookies stored.
+  - id: ccpa
+    conforms: true
+    evidence: Documented CCPA-compliant, cookieless, no raw IP persisted.
+  - id: pagination-cursor
+    conforms: false
+    evidence: Read endpoints use a limit param and a from/to window; no cursor/offset pagination.
+compliance:
+  gdpr_ccpa: published
+  dpa_url: https://millimetric.ai/legal/dpa
+  certifications: []
+  note: >-
+    Millimetric publishes GDPR/CCPA compliance and a Data Processing Agreement, but no named
+    audit certifications (SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP) were found on the site.

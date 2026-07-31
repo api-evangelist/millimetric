@@ -1,0 +1,29 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.millimetric.ai/api-reference/overview.md
+description: >-
+  Versioning, deprecation posture, and status surface for the Millimetric Analytics API.
+versioning:
+  scheme: uri-path
+  current: v1
+  policy: >-
+    /v1/* is stable. Additive changes (new fields on existing endpoints, new endpoints)
+    happen in place. Breaking changes will appear under /v2/*.
+  docs: https://docs.millimetric.ai/api-reference/overview.md
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support documented.
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.millimetric.ai
+status_page_note: >-
+  Advertised on the marketing site and docs. A live probe on 2026-07-20 returned HTTP 525
+  (Cloudflare origin TLS handshake) — the subdomain is provisioned but the endpoint was not
+  serving a valid cert at probe time.
+deprecated_operations: []
+roadmap_items:
+  - Server-side event deduplication (idempotency enforcement).
+  - Structured audit row on /v1/forget.
+  - Durable Object token bucket for multi-tenant rate-limit fairness.

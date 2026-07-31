@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Millimetric Analytics API
+  version: 1.0.0
+# generated: '2026-07-20'
+# method: generated
+# source: derived from docs.millimetric.ai; annotates the AE-transcribed OpenAPI
+extends: openapi/millimetric-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-rating: 4
+      x-apievangelist-notes: >-
+        API-first, MCP-native, privacy-respecting analytics. Strong developer surface
+        (rich docs, llms.txt, hosted MCP). Gaps: no published OpenAPI, npm SDKs not yet on
+        registry, no formal deprecation/SLA, error envelope is custom (not RFC 9457).
+  - target: $.info
+    update:
+      x-agentic-access: agentic-access/millimetric-agentic-access.yml
+      x-mcp-server: https://api.millimetric.ai/mcp
+  - target: $.paths['/v1/track'].post
+    update:
+      x-idempotency:
+        key: event_id
+        server_side_dedup: false
+        note: Documented idempotency/join key; no DB-level dedup yet (roadmap).
+  - target: $.components.securitySchemes.bearerAuth
+    update:
+      x-key-kinds:
+        pk_: { scope: ingest, surface: browser, origin_allowlisted: true }
+        sk_: { scope: ingest+read, surface: server }
+        rk_: { scope: read, surface: server/MCP, recommended_for: agents }
+        ak_: { scope: account-read, surface: /mcp/account, plan: Business }

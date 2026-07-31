@@ -1,0 +1,18 @@
+{
+  "provider": "millimetric",
+  "sources": [
+    "millimetric-identity-api-openapi.yml",
+    "millimetric-ingest-api-openapi.yml",
+    "millimetric-read-api-openapi.yml"
+  ],
+  "outputs": [
+    "millimetric-identity-api-openapi.yml",
+    "millimetric-ingest-api-openapi.yml",
+    "millimetric-read-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

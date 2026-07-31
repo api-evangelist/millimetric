@@ -1,0 +1,20 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/millimetric-openapi.yml + docs.millimetric.ai
+description: >-
+  Packaged Agent Skills for the Millimetric Analytics API. Each mirrors a marquee flow and is
+  grounded in real operationIds from the OpenAPI. Millimetric also ships a native hosted MCP
+  server (see mcp/millimetric-mcp.yml) exposing the same operations to agents directly.
+skills:
+  - file: millimetric-instrument-and-report.md
+    name: Instrument a product and report on traffic sources
+    api: openapi/millimetric-openapi.yml
+    operations: [trackEvent, batchEvents, getStats, getSources]
+  - file: millimetric-identify-and-attribute.md
+    name: Stitch anonymous visitors to known users
+    api: openapi/millimetric-openapi.yml
+    operations: [trackEvent, identify, queryEvents]
+  - file: millimetric-gdpr-forget.md
+    name: Honor a GDPR/CCPA right-to-be-forgotten request
+    api: openapi/millimetric-openapi.yml
+    operations: [forget, queryEvents]

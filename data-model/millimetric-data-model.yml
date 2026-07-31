@@ -1,0 +1,66 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/millimetric-openapi.yml, https://docs.millimetric.ai/reference/event-schema.md
+description: >-
+  Entity-relationship model for the Millimetric Analytics API, derived from the OpenAPI
+  schemas and the published event schema (Zod + ClickHouse columns).
+entities:
+  - name: Project
+    description: A tenant boundary. Owns keys, origins, events, and retention. Identified by project_id (UUID).
+    id_field: project_id
+  - name: ApiKey
+    description: Bearer credential. Kinds pk_/sk_/rk_/ak_ with scopes ingest/read/account. Prefix is the lookup key; only sha256(secret||pepper) is stored.
+    id_field: prefix
+    fields: [kind, env, prefix, scope, allowed_origins, last_used_at]
+  - name: Event
+    description: A single tracked event. The core write/read entity. Enriched server-side with source/geo/device/hashed-IP.
+    id_field: event_id
+    fields: [event_name, timestamp, anonymous_id, user_id, session_id, source, medium, campaign, source_confidence, country, device_type, browser, os, properties]
+  - name: Identity
+    description: The anonymous_id <-> user_id stitch created by POST /v1/identify (persisted as a $identify event).
+    keys: [anonymous_id, user_id]
+  - name: Session
+    description: Materialised view row per (project_id, session_id, anonymous_id). session_id derived as ${anonymous_id}-${30min_bucket} if omitted.
+    id_field: session_id
+  - name: ClassifiedSource
+    description: Classifier output attached to each event — (source, medium, campaign, confidence, rule_id) from url + referrer.
+relationships:
+  - from: Project
+    to: ApiKey
+    type: has_many
+    via: project_id
+  - from: Project
+    to: Event
+    type: has_many
+    via: project_id
+  - from: Event
+    to: Project
+    type: belongs_to
+    via: project_id
+  - from: Event
+    to: Identity
+    type: belongs_to
+    via: anonymous_id
+  - from: Identity
+    to: Event
+    type: has_many
+    via: anonymous_id
+  - from: Session
+    to: Event
+    type: has_many
+    via: session_id
+  - from: Event
+    to: Session
+    type: belongs_to
+    via: session_id
+  - from: Event
+    to: ClassifiedSource
+    type: has_one
+    via: source_rule_id
+id_prefixes:
+  event_id: caller-supplied, e.g. evt_*
+  project_id: UUID
+  api_key: '{kind}_{env}_{prefix}_{secret}, e.g. rk_live_99887766_...'
+storage:
+  raw: ClickHouse events table, partitioned by toYYYYMM(timestamp), ordered by (project_id, timestamp, event_id)
+  materialised_views: [daily_rollup, sessions]

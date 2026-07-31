@@ -1,0 +1,47 @@
+arazzo: 1.0.1
+info:
+  title: GDPR right-to-be-forgotten
+  version: 1.0.0
+  summary: Confirm a user's events, then permanently delete them with a secret key.
+sourceDescriptions:
+  - name: millimetric
+    url: ../openapi/millimetric-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: gdpr-delete
+    summary: query (confirm scope) -> forget (delete). sk_ key only.
+    inputs:
+      type: object
+      required: [sk_key, rk_key, user_id, from, to]
+      properties:
+        sk_key: { type: string, description: sk_live_* secret key (required for forget) }
+        rk_key: { type: string }
+        user_id: { type: string }
+        from: { type: string }
+        to: { type: string }
+    steps:
+      - stepId: confirm
+        operationId: queryEvents
+        parameters:
+          - { name: Authorization, in: header, value: "Bearer $inputs.rk_key" }
+          - { name: from, in: query, value: $inputs.from }
+          - { name: to, in: query, value: $inputs.to }
+          - { name: user_id, in: query, value: $inputs.user_id }
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          rows: $response.body#/rows
+      - stepId: forget
+        operationId: forget
+        parameters:
+          - { name: Authorization, in: header, value: "Bearer $inputs.sk_key" }
+        requestBody:
+          contentType: application/json
+          payload:
+            user_id: $inputs.user_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          queued: $response.body#/queued
+    outputs:
+      queued: $steps.forget.outputs.queued

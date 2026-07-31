@@ -1,0 +1,29 @@
+generated: '2026-07-20'
+method: derived
+source: https://docs.millimetric.ai/sdks/browser.md, https://docs.millimetric.ai/sdks/node.md
+description: >-
+  First-party client libraries documented by Millimetric. Both are published by the vendor
+  in the docs with npm install instructions. As of the 2026-07-20 probe neither package name
+  resolved on the public npm registry (HTTP 404) — they are documented but not yet published
+  to npm (or published privately). The browser loader itself IS live and served by the API
+  Worker at GET https://api.millimetric.ai/v1/a.js (HTTP 200, application/javascript).
+packages:
+  - language: javascript
+    registry: npm
+    name: "@millimetric/track"
+    url: https://www.npmjs.com/package/@millimetric/track
+    install: npm i @millimetric/track
+    official: true
+    published: false
+    registry_status: 404
+    description: Browser SDK (~1.8 KB gzipped). Anonymous ID, batched flushes, sendBeacon on pagehide, SPA history patching, DNT/GPC bail-out.
+    also_served_as: https://api.millimetric.ai/v1/a.js
+  - language: javascript
+    registry: npm
+    name: "@millimetric/track-node"
+    url: https://www.npmjs.com/package/@millimetric/track-node
+    install: npm i @millimetric/track-node
+    official: true
+    published: false
+    registry_status: 404
+    description: Server-side SDK for Node 18+ / Bun / Deno. Zero dependencies. Batching, 5xx retries with exponential backoff.

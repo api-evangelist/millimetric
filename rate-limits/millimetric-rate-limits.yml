@@ -1,0 +1,42 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.millimetric.ai/reference/rate-limits.md
+description: >-
+  Rate limits are per project, per route, enforced by an in-memory token bucket on the
+  Cloudflare Worker. There is no per-key or per-IP limit on top. Read endpoints are
+  unlimited. On exhaustion the Worker returns 429 rate_limited with a Retry-After header.
+scope: per-project, per-route
+enforcement: in-memory token bucket (Cloudflare Worker)
+signal:
+  status: 429
+  code: rate_limited
+  header: 'Retry-After: <seconds>'
+  body_field: retry_after_s
+rate_limits:
+  - endpoint: POST /v1/track
+    refill_rate: 50/sec
+    burst_capacity: 200
+    limit_count: 50
+    window: 1s
+  - endpoint: POST /v1/batch
+    refill_rate: 5/sec
+    burst_capacity: 20
+    limit_count: 5
+    window: 1s
+    note: Each call delivers up to 1000 events (5/sec x 1000 = 5,000 events/sec sustained).
+  - endpoint: GET /v1/query
+    refill_rate: unlimited
+  - endpoint: GET /v1/stats
+    refill_rate: unlimited
+  - endpoint: GET /v1/sources
+    refill_rate: unlimited
+  - endpoint: POST /v1/identify
+    refill_rate: unlimited
+  - endpoint: POST /v1/forget
+    refill_rate: unlimited
+  - endpoint: POST /mcp
+    refill_rate: inherits the underlying tool's limit
+guidance:
+  - Use the browser SDK (batches every 20 events or 2s) or Node SDK (flushAt) to stay under limits.
+  - Backfill via /v1/batch in chunks of 1000 with ~200ms spacing (~5/sec).
+  - Limits are per project; spread traffic across projects for more headroom.

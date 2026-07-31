@@ -1,0 +1,59 @@
+# Millimetric Docs
+
+## Millimetric.ai Docs
+
+- [Welcome](https://docs.millimetric.ai/readme.md): API-first, privacy-respecting analytics for vibe coders, small startups, and AI agents.
+- [Quickstart](https://docs.millimetric.ai/quickstart.md)
+- [Architecture](https://docs.millimetric.ai/architecture.md)
+- [Events](https://docs.millimetric.ai/core-concepts/events.md): What an event is, how to send one, and what the server adds.
+- [Properties](https://docs.millimetric.ai/core-concepts/properties.md): What to put in \`properties\`, what the SDK adds automatically, and how to design a clean schema.
+- [Identities](https://docs.millimetric.ai/core-concepts/identities.md): anonymous\_id, user\_id, and how /v1/identify stitches them together.
+- [Sessions](https://docs.millimetric.ai/core-concepts/sessions.md): How session\_id is derived, when to override it, and what the sessions view does for you.
+- [API keys](https://docs.millimetric.ai/core-concepts/api-keys.md): pk\_, sk\_, rk\_, ak\_ — when to use which.
+- [Attribution & the classifier](https://docs.millimetric.ai/core-concepts/attribution.md): How the classifier turns a URL + referrer into (source, medium, confidence).
+- [Privacy & data retention](https://docs.millimetric.ai/core-concepts/privacy.md): Exactly what gets stored, and what doesn't.
+- [Overview](https://docs.millimetric.ai/api-reference/overview.md): Base URL, auth, content type, errors, rate limits.
+- [POST /v1/track](https://docs.millimetric.ai/api-reference/track.md): POST /v1/track — emit a single event.
+- [POST /v1/batch](https://docs.millimetric.ai/api-reference/batch.md): POST /v1/batch — emit up to 1000 events in one call.
+- [POST /v1/identify](https://docs.millimetric.ai/api-reference/identify.md): POST /v1/identify — link an anonymous\_id to a user\_id.
+- [POST /v1/forget](https://docs.millimetric.ai/api-reference/forget.md): POST /v1/forget — GDPR delete for a user.
+- [GET /v1/query](https://docs.millimetric.ai/api-reference/query.md): GET /v1/query — return raw events filtered by time range.
+- [GET /v1/stats](https://docs.millimetric.ai/api-reference/stats.md): GET /v1/stats — aggregations over events.
+- [GET /v1/sources](https://docs.millimetric.ai/api-reference/sources.md): GET /v1/sources — top sources/mediums with the FB social-vs-paid split.
+- [Browser — @millimetric/track](https://docs.millimetric.ai/sdks/browser.md): @millimetric/track — the browser SDK. ~1.8 KB gzipped.
+- [Node — @millimetric/track-node](https://docs.millimetric.ai/sdks/node.md): @millimetric/track-node — server-side SDK. Node 18+ / Bun / Deno.
+- [curl & raw HTTP](https://docs.millimetric.ai/sdks/curl.md): Plain HTTP — no SDK required.
+- [Framework recipes](https://docs.millimetric.ai/sdks/frameworks.md): Drop-in setup for React, Next.js, Vue, Svelte, and other JS frameworks.
+- [React](https://docs.millimetric.ai/sdks/frameworks/react.md): React (Vite, CRA, Remix client) + @millimetric/track.
+- [Next.js](https://docs.millimetric.ai/sdks/frameworks/nextjs.md): Next.js (App Router and Pages) + @millimetric/track. Covers RSC and edge.
+- [Vue](https://docs.millimetric.ai/sdks/frameworks/vue.md): Vue 3 (and Nuxt) + @millimetric/track.
+- [Svelte / SvelteKit](https://docs.millimetric.ai/sdks/frameworks/svelte.md): Svelte 5 / SvelteKit + @millimetric/track.
+- [MCP server](https://docs.millimetric.ai/mcp-for-ai-agents/overview.md): The MCP server — AI agents emit and query analytics natively.
+- [Overview](https://docs.millimetric.ai/recipes/recipes.md): End-to-end worked examples for the things people actually want to do.
+- [Track a signup funnel](https://docs.millimetric.ai/recipes/signup-funnel.md): A full signup funnel — pageview, CTA click, form view, signup, activation — with drop-off queries.
+- [E-commerce events](https://docs.millimetric.ai/recipes/ecommerce.md): A standard e-commerce taxonomy with revenue and AOV queries.
+- [Marketing attribution dashboards](https://docs.millimetric.ai/recipes/marketing-attribution.md): First-touch vs last-touch, the FB social-vs-paid split, channel ROI.
+- [Server-side events from a backend](https://docs.millimetric.ai/recipes/server-side.md): When to track from your backend, how to thread anonymous\_id, and patterns for batching.
+- [Link anonymous → known users](https://docs.millimetric.ai/recipes/anonymous-to-known.md): Stitching pre-login activity to the post-login user, including multi-device.
+- [GDPR right-to-be-forgotten](https://docs.millimetric.ai/recipes/gdpr-delete.md): A complete /v1/forget flow including audit-trail patterns and what doesn't get deleted.
+- [Funnel & retention analysis](https://docs.millimetric.ai/recipes/funnels.md): SQL templates for n-step funnels, day-N retention, and time-to-event.
+- [Event schema](https://docs.millimetric.ai/reference/event-schema.md): Full Zod schemas, ClickHouse columns, and what's required vs optional.
+- [Event & property naming](https://docs.millimetric.ai/reference/event-naming.md): A short, opinionated style guide for event and property names.
+- [Errors](https://docs.millimetric.ai/reference/errors.md): Every error code the API can return, what triggers it, and how to fix it.
+- [Rate limits](https://docs.millimetric.ai/reference/rate-limits.md): Per-project, per-route token buckets — and how to stay under them.
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://docs.millimetric.ai/readme.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
