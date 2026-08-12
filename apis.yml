@@ -123,7 +123,7 @@ common:
 - type: StatusPage
   url: https://status.millimetric.ai
 - type: OpenAPI
-  url: openapi/millimetric-openapi.yml
+  url: openapi/_original/millimetric-openapi.yml
 - type: MCPServer
   url: mcp/millimetric-mcp.yml
 - type: LLMsTxt
