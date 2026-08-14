@@ -32,7 +32,7 @@ x-tier: enriched
 x-tier-reason: real-api-surface
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-13'
 tags:
 - Company
 - Analytics
@@ -50,10 +50,16 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 x-enrichment:
-  date: '2026-07-20'
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 24
+  artifacts_added: 1
+  artifacts_updated: 7
   pass: local-v1
+  note: >-
+    Round 2. Added the MCP-to-REST tool crosswalk; re-probed the contract, /.well-known/,
+    npm, MCP tools/list, the status page and the advertised changelog. Removed the StatusPage
+    pointer — https://status.millimetric.ai returned HTTP 525 on both probes (2026-07-20 and
+    2026-08-13) and has never served a page.
 apis:
 - aid: millimetric:millimetric-identity-api
   name: Millimetric Identity API
@@ -120,12 +126,12 @@ common:
   url: https://millimetric.ai/legal/terms
 - type: PrivacyPolicy
   url: https://millimetric.ai/legal/privacy
-- type: StatusPage
-  url: https://status.millimetric.ai
 - type: OpenAPI
   url: openapi/_original/millimetric-openapi.yml
 - type: MCPServer
   url: mcp/millimetric-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/millimetric-tool-crosswalk.yml
 - type: LLMsTxt
   url: llms/millimetric-llms.txt
 - type: Authentication
