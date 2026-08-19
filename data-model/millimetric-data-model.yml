@@ -60,7 +60,7 @@ relationships:
 id_prefixes:
   event_id: caller-supplied, e.g. evt_*
   project_id: UUID
-  api_key: '{kind}_{env}_{prefix}_{secret}, e.g. rk_live_99887766_...'
+  api_key: '{kind}_{env}_{prefix}_{secret} — kind is pk/sk/rk/ak, env is live, prefix is an 8-char lookup, secret is url-safe and shown once'
 storage:
   raw: ClickHouse events table, partitioned by toYYYYMM(timestamp), ordered by (project_id, timestamp, event_id)
   materialised_views: [daily_rollup, sessions]

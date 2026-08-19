@@ -1,18 +1,38 @@
-generated: '2026-07-20'
-method: searched
-source: live probes 2026-07-20
+generated: '2026-08-13'
+method: probed
+source: live probes 2026-08-13 (first probed 2026-07-20)
 description: >-
-  Probe of the /.well-known/ discovery surface on the Millimetric hosts. No well-known
-  documents were found (all 404). Recorded as honest none-results. Consistent with the
-  API's Bearer-key auth model (no OIDC/OAuth discovery) and no published security.txt.
+  Probe of the /.well-known/ discovery surface on every Millimetric host — the API host, the
+  apex marketing host and the docs host. Re-probed 2026-08-13: every path still 404s. Recorded
+  as honest none-results. Consistent with the API's Bearer-key auth model (no OIDC/OAuth
+  discovery surface) and with no published security.txt. NO WellKnown / SecurityTxt pointer is
+  emitted in apis.yml, because nothing here is a served document — the file records an absence.
 hosts:
   - host: https://api.millimetric.ai
     documents:
       - { path: /.well-known/security.txt, status: 404 }
       - { path: /.well-known/openid-configuration, status: 404 }
       - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/oauth-protected-resource, status: 404 }
       - { path: /.well-known/api-catalog, status: 404 }
       - { path: /.well-known/ai-plugin.json, status: 404 }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
   - host: https://millimetric.ai
     documents:
       - { path: /.well-known/security.txt, status: 404 }
+      - { path: /security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
+notes:
+  - >-
+    The apex host redirects to https://www.millimetric.ai (Next.js on Vercel); the 404s above are
+    the responses after following that redirect.
+  - >-
+    No A2A Agent Card on any host, at either the canonical /.well-known/agent-card.json path or
+    the legacy /.well-known/agent.json path — so no a2a/ artifact and no AgentCard pointer exist
+    for this provider. The agent surface Millimetric does ship is MCP (see mcp/).

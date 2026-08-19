@@ -1,31 +1,68 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: searched
-source: https://millimetric.ai/#pricing
+source: https://www.millimetric.ai/#pricing
+checked: '2026-08-13'
 description: >-
-  Millimetric pricing tiers, captured from the marketing site. Usage-metered on events per
-  month with tiered data retention. MCP (single-project) requires Pro+; account-level MCP
-  requires Business.
+  Millimetric pricing tiers, read from the public pricing section of the marketing site
+  (re-read 2026-08-13, HTTP 200). Usage-metered on events per month with tiered data
+  retention, project count, support channel and MCP entitlement. Self-serve on every tier —
+  the page states "No 'contact sales'. No per-seat fees. Just events." Above 10M events/month
+  there is no published tier: the page says "Need more? Email hello@millimetric.ai — we'll
+  quote you in plain English."
 currency: usd
 billing: per month
+plan_count: 3
+overage:
+  published: false
+  note: >-
+    No overage rate, hard cap, or throttling behavior is published for exceeding a tier's monthly
+    event allowance. Above the top published tier the provider quotes by email.
 plans:
   - name: Free
     price: 0
+    currency: usd
+    period: month
     events_per_month: 100000
     retention_days: 30
+    projects: 1
+    mcp_access: false
+    support: community
+    sign_up: self-serve, no credit card
     highlights:
-      - API + browser/Node SDKs
+      - API + browser and Node SDKs
       - Attribution classifier (paid-vs-social split)
+      - Everything under 100k events / month
   - name: Pro
     price: 19
+    currency: usd
+    period: month
     events_per_month: 1000000
     retention_days: 90
+    projects: unlimited
+    mcp_access: true
+    mcp_detail: Single-project MCP server (POST /mcp)
+    support: email
     highlights:
       - Everything in Free
-      - Single-project MCP server (/mcp)
+      - MCP server access
+      - Marked "Most popular" on the pricing page
   - name: Business
     price: 99
+    currency: usd
+    period: month
     events_per_month: 10000000
     retention_days: 365
+    projects: unlimited
+    mcp_access: true
+    mcp_detail: >-
+      Account-level MCP (POST /mcp/account) with ak_live_* keys, list_projects and
+      compare_projects. Pro accounts calling it get 402 with error "plan_limit".
+    support: priority
     highlights:
       - Everything in Pro
-      - Account-level MCP (/mcp/account) with ak_ keys, list_projects, compare_projects
+      - Cross-project agent access through one credential
+custom:
+  available: true
+  contact: hello@millimetric.ai
+  note: Above 10M events/month, quoted by email. No published enterprise tier or price.
+limits_reference: rate-limits/millimetric-rate-limits.yml

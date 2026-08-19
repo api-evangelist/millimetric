@@ -1,0 +1,166 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Millimetric Analytics Identity Read API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Read",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return raw events filtered by time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.millimetric.ai/v1/query",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 timestamp (inclusive)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 timestamp (exclusive)."
+              },
+              {
+                "name": "event",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one event name."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one source."
+              },
+              {
+                "name": "medium",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one medium."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to events tagged with this user_id."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return raw event rows matching a time range and optional filters. For debugging, ad-hoc inspection, and small reports. Requires a read-scope key (rk_*)."
+        },
+        {
+          "info": {
+            "name": "Aggregations over events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.millimetric.ai/v1/stats",
+            "params": [
+              {
+                "name": "metric",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "event",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "group_by",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated columns. Allowed: event_name, source, medium, country, device_type, browser, os, path."
+              },
+              {
+                "name": "interval",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Aggregate counts or unique-visitor counts (HyperLogLog) over a time range, optionally grouped and/or time-bucketed. Requires a read-scope key (rk_*)."
+        },
+        {
+          "info": {
+            "name": "Top sources/mediums with the paid-vs-social split",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.millimetric.ai/v1/sources",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "breakdown",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Top sources (and optionally source x medium) for the project — the endpoint that surfaces the Facebook social-vs-paid split. Requires a read-scope key (rk_*)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

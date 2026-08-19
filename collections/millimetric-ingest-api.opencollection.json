@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Millimetric Analytics Identity Ingest API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ingest",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Emit a single analytics event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.millimetric.ai/v1/track",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Emit a single analytics event — the most common write endpoint. Requires an ingest-scope key (pk_* browser, origin-checked; or sk_* server). The server enriches every event with source/medium classification, geo, device, and a hashed IP before insert."
+        },
+        {
+          "info": {
+            "name": "Emit up to 1000 events in one call",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.millimetric.ai/v1/batch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Send up to 1000 events in a single request. All-or-nothing at the request level — if validation fails on any event, none are written. Used by the browser SDK for buffered flushes. Requires an ingest-scope key (pk_* or sk_*)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,8 +1,10 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: searched
 source: https://docs.millimetric.ai/api-reference/overview.md
+checked: '2026-08-13'
 description: >-
-  Versioning, deprecation posture, and status surface for the Millimetric Analytics API.
+  Versioning, deprecation posture, changelog and status surface for the Millimetric Analytics
+  API. Re-checked 2026-08-13.
 versioning:
   scheme: uri-path
   current: v1
@@ -17,11 +19,31 @@ deprecation:
 sla:
   url: null
   uptime_target: null
+changelog:
+  published: false
+  advertised_url: https://docs.millimetric.ai/changelog
+  probe:
+    url: https://docs.millimetric.ai/changelog
+    http_status: 404
+    checked: '2026-08-13'
+  soft_404:
+    url: https://docs.millimetric.ai/changelog.md
+    http_status: 200
+    body: '# Page Not Found — The URL `changelog` does not exist.'
+    note: >-
+      The .md variant answers HTTP 200 with a GitBook "Page Not Found" body. It is a soft-404,
+      not a changelog — recorded so a later pass does not credit it as a document.
+  note: >-
+    The marketing site footer links a Changelog under Product (https://docs.millimetric.ai/changelog)
+    but the page does not exist, and no changelog appears in the docs llms.txt index. No dated
+    release history is published anywhere on the provider's surface, so no changelog/ artifact and
+    no ChangeLog pointer are emitted.
 status_page: https://status.millimetric.ai
 status_page_note: >-
-  Advertised on the marketing site and docs. A live probe on 2026-07-20 returned HTTP 525
-  (Cloudflare origin TLS handshake) — the subdomain is provisioned but the endpoint was not
-  serving a valid cert at probe time.
+  Advertised on the marketing site and docs. Live probes on 2026-07-20 and again on 2026-08-13
+  both returned HTTP 525 (Cloudflare origin TLS handshake failure) — the subdomain is provisioned
+  but has never served a valid response in either probe, so the advertised status page is not
+  actually reachable.
 deprecated_operations: []
 roadmap_items:
   - Server-side event deduplication (idempotency enforcement).

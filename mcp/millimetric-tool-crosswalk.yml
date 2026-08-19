@@ -1,0 +1,116 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  mcp/millimetric-mcp.yml + https://docs.millimetric.ai/mcp-for-ai-agents/overview.md +
+  openapi/_original/millimetric-openapi.yml
+description: >-
+  Binds every Millimetric MCP tool to the REST operation that backs it, so an agent can reuse the
+  OpenAPI parameters and requestBody as the tool's real inputSchema. The live MCP endpoint is
+  auth-gated (POST https://api.millimetric.ai/mcp returned HTTP 401 {"error":"missing_bearer_token"}
+  on 2026-08-13), so tools/list could not be introspected anonymously; the mapping below is made
+  from the published tool reference and the operation semantics, and confidence is recorded
+  accordingly. No GraphQL surface exists.
+surfaces:
+  openapi: openapi/_original/millimetric-openapi.yml
+  openapi_note: >-
+    Millimetric publishes no OpenAPI of its own (probed 2026-08-13: /openapi.json, /openapi.yaml,
+    /swagger.json, /v1/openapi.json, /api-docs, /docs, /redoc all 404 on api.millimetric.ai, and
+    /openapi.json 404s on both docs.millimetric.ai and millimetric.ai). The spec in this repo was
+    transcribed by API Evangelist from the published API reference.
+  graphql: null
+  mcp:
+    - url: https://api.millimetric.ai/mcp
+      scope: single project
+      gated: true
+      probe: { method: POST, body: 'tools/list', http_status: 401, error: missing_bearer_token, checked: '2026-08-13' }
+    - url: https://api.millimetric.ai/mcp/account
+      scope: every project the account owns
+      gated: true
+      probe: { method: POST, body: 'tools/list', http_status: 401, checked: '2026-08-13' }
+crosswalk:
+  - tool: track_event
+    category: ingest
+    rest: [trackEvent]
+    binding: one-to-one
+    confidence: high
+    note: >-
+      Same arguments as POST /v1/track (event, event_id, anonymous_id, user_id, properties);
+      inherits TrackEventInput as its inputSchema. Requires an ingest-scope key (sk_live_*) — the
+      MCP endpoint rejects pk_ keys with 403 key_kind_not_allowed.
+  - tool: query_events
+    category: read
+    rest: [queryEvents]
+    binding: one-to-one
+    confidence: high
+    note: >-
+      Mirrors GET /v1/query parameters (from, to, event, source, limit). On /mcp/account it gains
+      optional project_id / project_slug / project_ids arguments that have no REST equivalent.
+  - tool: get_stats
+    category: read
+    rest: [getStats]
+    binding: one-to-one
+    confidence: high
+    note: >-
+      Mirrors GET /v1/stats (metric, from, to, group_by, interval). Account MCP allows
+      group_by=project_id, which the REST operation cannot express.
+  - tool: top_sources
+    category: read
+    rest: [getSources]
+    binding: one-to-one
+    confidence: high
+    note: >-
+      Named differently from the REST operation (top_sources vs GET /v1/sources / getSources) but
+      documented with the same arguments (from, to, breakdown, limit) and the same FB
+      social-vs-paid split output.
+mcp_only:
+  - tool: list_projects
+    reason: >-
+      Account MCP only (/mcp/account, ak_live_* key, Business tier). Project listing is a
+      control-plane read held in Supabase; no public /v1 REST operation exposes it.
+  - tool: compare_projects
+    reason: >-
+      Account MCP only. Composite — ranks every accessible project by one metric in a single call.
+      Would require N calls to GET /v1/stats over N projects to reproduce over REST.
+  - tool: funnel
+    reason: >-
+      Listed in the MCP scope table ("rk_live_… can call query_events, get_stats, top_sources,
+      funnel, all resources") and implied by the page's "five operations" wording, but it has no
+      documented tool schema on the MCP page and no REST operation. Unverifiable while tools/list
+      is gated.
+    confidence: low
+rest_only:
+  - operation: batchEvents
+    reason: >-
+      POST /v1/batch (up to 1000 events per call) has no MCP tool. Agents emitting many events
+      must call track_event repeatedly, at the /v1/track token-bucket rate rather than the batch one.
+  - operation: identify
+    reason: POST /v1/identify (anonymous_id -> user_id stitching) is not exposed as an MCP tool.
+  - operation: forget
+    reason: >-
+      POST /v1/forget (GDPR right-to-be-forgotten) is deliberately absent from the MCP surface —
+      a destructive, irreversible delete kept off the agent path. sk_ keys only over REST.
+resources:
+  - uri: events://recent
+    surface: /mcp
+    backing: queryEvents (last 100 events for the authenticated project)
+  - uri: schema://events
+    surface: /mcp and /mcp/account
+    backing: none (distinct event names observed in the last 30 days; no REST equivalent)
+  - uri: projects://all
+    surface: /mcp/account
+    backing: none (control-plane project list)
+undocumented_claims:
+  - name: top_pages
+    where: https://www.millimetric.ai/ (For AI agents section)
+    note: >-
+      The marketing site advertises a top_pages tool. It appears nowhere in the MCP documentation
+      and has no REST operation, so it is recorded as an unverified claim rather than mapped.
+coverage:
+  rest_operations: 7
+  documented_mcp_tools: 4
+  account_only_tools: 2
+  undocumented_or_unverified_tools: 2
+  mapped_one_to_one: 4
+  rest_operations_with_no_tool: 3
+  tools_with_no_rest_operation: 3
+  live_schema_introspected: false

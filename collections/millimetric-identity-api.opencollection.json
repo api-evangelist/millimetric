@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Millimetric Analytics Identity API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Identity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Link an anonymous_id to a user_id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.millimetric.ai/v1/identify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Bind a known user_id to a visitor's anonymous_id. Persists as a special $identify event so pre- and post-login behavior can be stitched together. Requires an ingest-scope key (pk_* or sk_*)."
+        },
+        {
+          "info": {
+            "name": "GDPR delete for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.millimetric.ai/v1/forget",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Permanently delete every event for (project_id, user_id). Intended for GDPR / CCPA Right-to-be-Forgotten. sk_* keys only — pk_* is explicitly rejected to prevent a leaked browser key from wiping data."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

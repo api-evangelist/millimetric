@@ -1,12 +1,16 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: derived
-source: https://docs.millimetric.ai/sdks/browser.md, https://docs.millimetric.ai/sdks/node.md
+source: https://docs.millimetric.ai/sdks/browser.md, https://docs.millimetric.ai/sdks/node.md, registry.npmjs.org probes 2026-08-13
 description: >-
-  First-party client libraries documented by Millimetric. Both are published by the vendor
-  in the docs with npm install instructions. As of the 2026-07-20 probe neither package name
-  resolved on the public npm registry (HTTP 404) — they are documented but not yet published
-  to npm (or published privately). The browser loader itself IS live and served by the API
-  Worker at GET https://api.millimetric.ai/v1/a.js (HTTP 200, application/javascript).
+  First-party client libraries documented by Millimetric. Both npm packages are named in the
+  docs, the marketing site and the architecture page (packages/sdk-browser, packages/sdk-node),
+  with npm install instructions — but neither name resolves on the public npm registry. Re-probed
+  2026-08-13: registry.npmjs.org/@millimetric/track and .../@millimetric/track-node both return
+  HTTP 404, and the npm search API returns 0 results for "millimetric". They are documented but
+  unpublished (or published privately). The browser build IS live and served directly by the API
+  Worker at GET https://api.millimetric.ai/v1/a.js (HTTP 200, application/javascript, 4,193 bytes)
+  — an unpinned CDN-style distribution with no version in the URL or the bundle.
+currency_checked: '2026-08-13'
 packages:
   - language: javascript
     registry: npm
@@ -14,9 +18,16 @@ packages:
     url: https://www.npmjs.com/package/@millimetric/track
     install: npm i @millimetric/track
     official: true
-    published: false
+    version: null
+    published: null
     registry_status: 404
-    description: Browser SDK (~1.8 KB gzipped). Anonymous ID, batched flushes, sendBeacon on pagehide, SPA history patching, DNT/GPC bail-out.
+    registry_checked: '2026-08-13'
+    note: >-
+      Not present on the public npm registry (404 on registry.npmjs.org and on the jsDelivr and
+      unpkg metadata APIs, all probed 2026-08-13). No version or publish date exists to record;
+      null here means "checked, nothing published", not "not checked". A consumer following the
+      documented `npm i @millimetric/track` cannot install it today.
+    description: Browser SDK (~1.8 KB gzipped). Anonymous ID in localStorage, batched flushes, sendBeacon on pagehide, SPA history patching, DNT/GPC bail-out.
     also_served_as: https://api.millimetric.ai/v1/a.js
   - language: javascript
     registry: npm
@@ -24,6 +35,27 @@ packages:
     url: https://www.npmjs.com/package/@millimetric/track-node
     install: npm i @millimetric/track-node
     official: true
-    published: false
+    version: null
+    published: null
     registry_status: 404
+    registry_checked: '2026-08-13'
+    note: >-
+      Not present on the public npm registry (404 probed 2026-08-13). Documented for Node 18+ /
+      Bun / Deno with zero dependencies, but unresolvable from npm.
     description: Server-side SDK for Node 18+ / Bun / Deno. Zero dependencies. Batching, 5xx retries with exponential backoff.
+  - language: javascript
+    registry: cdn
+    name: millimetric browser loader (a.js)
+    url: https://api.millimetric.ai/v1/a.js
+    install: '<script async src="https://api.millimetric.ai/v1/a.js" data-key="pk_live_..."></script>'
+    official: true
+    version: null
+    published: null
+    registry_status: 200
+    registry_checked: '2026-08-13'
+    size_bytes: 4193
+    note: >-
+      Served by the API Worker itself, not a package registry, so there is no metadata endpoint to
+      query. The URL carries no version segment and the bundle embeds no version string, so the
+      distribution is UNPINNED — it floats to whatever the Worker is currently serving and a
+      consumer cannot tell which build they loaded. Recorded as version null for that reason.
