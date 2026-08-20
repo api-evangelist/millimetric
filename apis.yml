@@ -42,6 +42,17 @@ tags:
 - Privacy
 - MCP
 - AI Agents
+- Event
+- Developer Tools
+tags_raw:
+- Company
+- Analytics
+- Web Analytics
+- Product Analytics
+- Attribution
+- Privacy
+- MCP
+- AI Agents
 - Events
 - Developer Tools
 maintainers:
@@ -94,7 +105,8 @@ apis:
   description: Query raw events and aggregated stats and attribution.
   humanURL: https://docs.millimetric.ai/api-reference/overview
   baseURL: https://api.millimetric.ai
-  tags:
+  tags: []
+  tags_raw:
   - Read
   properties:
   - type: OpenAPI
