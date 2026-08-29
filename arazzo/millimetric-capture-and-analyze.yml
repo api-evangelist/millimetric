@@ -4,54 +4,57 @@ info:
   version: 1.0.0
   summary: Emit an event, then pull aggregate stats and the paid-vs-social attribution split.
 sourceDescriptions:
-  - name: millimetric
-    url: ../openapi/millimetric-openapi.yml
-    type: openapi
+- name: ingestApi
+  url: ../openapi/millimetric-ingest-api-openapi.yml
+  type: openapi
+- name: readApi
+  url: ../openapi/millimetric-read-api-openapi.yml
+  type: openapi
 workflows:
-  - workflowId: capture-and-analyze
-    summary: Track an event, then report stats and top sources for a time window.
-    inputs:
-      type: object
-      required: [sk_key, rk_key, from, to]
-      properties:
-        sk_key: { type: string, description: sk_live_* ingest key }
-        rk_key: { type: string, description: rk_live_* read key }
-        event: { type: string, default: signup }
-        anonymous_id: { type: string, default: u_demo }
-        from: { type: string }
-        to: { type: string }
-    steps:
-      - stepId: track
-        operationId: trackEvent
-        parameters:
-          - { name: Authorization, in: header, value: "Bearer $inputs.sk_key" }
-        requestBody:
-          contentType: application/json
-          payload:
-            event: $inputs.event
-            anonymous_id: $inputs.anonymous_id
-        successCriteria:
-          - condition: $statusCode == 202
-      - stepId: stats
-        operationId: getStats
-        parameters:
-          - { name: Authorization, in: header, value: "Bearer $inputs.rk_key" }
-          - { name: metric, in: query, value: count }
-          - { name: from, in: query, value: $inputs.from }
-          - { name: to, in: query, value: $inputs.to }
-          - { name: group_by, in: query, value: "source,medium" }
-        successCriteria:
-          - condition: $statusCode == 200
-      - stepId: sources
-        operationId: getSources
-        parameters:
-          - { name: Authorization, in: header, value: "Bearer $inputs.rk_key" }
-          - { name: from, in: query, value: $inputs.from }
-          - { name: to, in: query, value: $inputs.to }
-          - { name: breakdown, in: query, value: source_medium }
-        successCriteria:
-          - condition: $statusCode == 200
-        outputs:
-          rows: $response.body#/rows
+- workflowId: capture-and-analyze
+  summary: Track an event, then report stats and top sources for a time window.
+  inputs:
+    type: object
+    required: [sk_key, rk_key, from, to]
+    properties:
+      sk_key: {type: string, description: sk_live_* ingest key}
+      rk_key: {type: string, description: rk_live_* read key}
+      event: {type: string, default: signup}
+      anonymous_id: {type: string, default: u_demo}
+      from: {type: string}
+      to: {type: string}
+  steps:
+  - stepId: track
+    operationId: trackEvent
+    parameters:
+    - {name: Authorization, in: header, value: "Bearer $inputs.sk_key"}
+    requestBody:
+      contentType: application/json
+      payload:
+        event: $inputs.event
+        anonymous_id: $inputs.anonymous_id
+    successCriteria:
+    - condition: $statusCode == 202
+  - stepId: stats
+    operationId: getStats
+    parameters:
+    - {name: Authorization, in: header, value: "Bearer $inputs.rk_key"}
+    - {name: metric, in: query, value: count}
+    - {name: from, in: query, value: $inputs.from}
+    - {name: to, in: query, value: $inputs.to}
+    - {name: group_by, in: query, value: "source,medium"}
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: sources
+    operationId: getSources
+    parameters:
+    - {name: Authorization, in: header, value: "Bearer $inputs.rk_key"}
+    - {name: from, in: query, value: $inputs.from}
+    - {name: to, in: query, value: $inputs.to}
+    - {name: breakdown, in: query, value: source_medium}
+    successCriteria:
+    - condition: $statusCode == 200
     outputs:
-      source_rows: $steps.sources.outputs.rows
+      rows: $response.body#/rows
+  outputs:
+    source_rows: $steps.sources.outputs.rows

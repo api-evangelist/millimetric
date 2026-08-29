@@ -1,6 +1,6 @@
-generated: '2026-07-20'
-method: derived
-source: openapi/millimetric-openapi.yml
+x-generated: '2026-07-20'
+x-method: derived
+x-source: openapi/millimetric-openapi.yml
 workflows:
   - file: millimetric-capture-and-analyze.yml
     workflowId: capture-and-analyze
