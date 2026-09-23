@@ -69,29 +69,7 @@ client_config_example: "{\n  \"mcpServers\": {\n    \"millimetric\": {\n      \"
 deployment:
   mode: remote
   endpoint: https://api.millimetric.ai/mcp
-  account_endpoint: https://api.millimetric.ai/mcp/account
-  install: null
-  package: null
-  auth: api-key
-  auth_detail: 'Authorization: Bearer rk_live_* / sk_live_* (/mcp) or ak_live_* (/mcp/account). No OAuth — /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource both 404.'
   verified: probed
   probe: gated
-  checked: '2026-08-13'
-  source: live probe + https://docs.millimetric.ai/mcp-for-ai-agents/overview.md
-  x-evidence:
-    - url: https://api.millimetric.ai/mcp
-      method: POST
-      body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-      http_status: 401
-      response: '{"error":"missing_bearer_token"}'
-      fetched: '2026-08-13'
-    - url: https://api.millimetric.ai/mcp/account
-      method: POST
-      body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-      http_status: 401
-      fetched: '2026-08-13'
-  note: >-
-    Remote, hosted, and reachable — an MCP client POSTs straight to the URL, no local install and
-    no package to run. The endpoint is live but auth-gated, so tools/list could not be introspected
-    anonymously; the tool list above is the provider's own published reference, not live
-    introspection. See mcp/millimetric-tool-crosswalk.yml for the binding to REST operationIds.
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Millimetric Analytics Identity Read API
+  title: Millimetric Analytics Read API
   version: v1
   description: API-first, privacy-respecting analytics for developers, small startups, and AI agents. Capture events, identify users, run GDPR deletes, and query aggregated stats and attribution — no cookies, no dashboards required. All access is via Bearer API keys (pk_/sk_/rk_/ak_ kinds). Endpoints are versioned under /v1/*.
   contact:
@@ -262,32 +262,18 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
-  responses:
-    Forbidden:
-      description: 403 — origin_not_allowed / insufficient_scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: insufficient_scope
-    Unauthorized:
-      description: 401 — missing or invalid Bearer key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_api_key
-    InvalidParams:
-      description: 400 invalid_params / invalid_group_by — query string failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_params
   schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: Stable machine-readable error code.
+        details:
+          type: object
+          additionalProperties: true
     EventRow:
       type: object
       properties:
@@ -330,17 +316,31 @@ components:
         properties:
           type: string
           description: JSON-encoded string.
-    Error:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: string
-          description: Stable machine-readable error code.
-        details:
-          type: object
-          additionalProperties: true
+  responses:
+    InvalidParams:
+      description: 400 invalid_params / invalid_group_by — query string failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_params
+    Forbidden:
+      description: 403 — origin_not_allowed / insufficient_scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: insufficient_scope
+    Unauthorized:
+      description: 401 — missing or invalid Bearer key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_api_key
   securitySchemes:
     bearerAuth:
       type: http

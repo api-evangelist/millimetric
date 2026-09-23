@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Millimetric Analytics Identity API
   version: v1
@@ -98,6 +98,18 @@ paths:
                 error: forget_failed
 components:
   responses:
+    InvalidPayload:
+      description: 400 invalid_payload — body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_payload
+            details:
+              fieldErrors:
+                event:
+                - Required
     Forbidden:
       description: 403 — origin_not_allowed / insufficient_scope.
       content:
@@ -114,18 +126,6 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             error: invalid_api_key
-    InvalidPayload:
-      description: 400 invalid_payload — body failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_payload
-            details:
-              fieldErrors:
-                event:
-                - Required
   schemas:
     IdentifyInput:
       type: object
@@ -144,15 +144,6 @@ components:
         traits:
           type: object
           additionalProperties: true
-    ForgetInput:
-      type: object
-      required:
-      - user_id
-      properties:
-        user_id:
-          type: string
-          minLength: 1
-          maxLength: 256
     Error:
       type: object
       required:
@@ -164,6 +155,15 @@ components:
         details:
           type: object
           additionalProperties: true
+    ForgetInput:
+      type: object
+      required:
+      - user_id
+      properties:
+        user_id:
+          type: string
+          minLength: 1
+          maxLength: 256
   securitySchemes:
     bearerAuth:
       type: http
