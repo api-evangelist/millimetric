@@ -317,14 +317,6 @@ components:
           type: string
           description: JSON-encoded string.
   responses:
-    InvalidParams:
-      description: 400 invalid_params / invalid_group_by — query string failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_params
     Forbidden:
       description: 403 — origin_not_allowed / insufficient_scope.
       content:
@@ -333,6 +325,14 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             error: insufficient_scope
+    InvalidParams:
+      description: 400 invalid_params / invalid_group_by — query string failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_params
     Unauthorized:
       description: 401 — missing or invalid Bearer key.
       content:

@@ -97,36 +97,18 @@ paths:
               example:
                 error: forget_failed
 components:
-  responses:
-    InvalidPayload:
-      description: 400 invalid_payload — body failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_payload
-            details:
-              fieldErrors:
-                event:
-                - Required
-    Forbidden:
-      description: 403 — origin_not_allowed / insufficient_scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: insufficient_scope
-    Unauthorized:
-      description: 401 — missing or invalid Bearer key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_api_key
   schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: Stable machine-readable error code.
+        details:
+          type: object
+          additionalProperties: true
     IdentifyInput:
       type: object
       required:
@@ -144,17 +126,6 @@ components:
         traits:
           type: object
           additionalProperties: true
-    Error:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: string
-          description: Stable machine-readable error code.
-        details:
-          type: object
-          additionalProperties: true
     ForgetInput:
       type: object
       required:
@@ -164,6 +135,35 @@ components:
           type: string
           minLength: 1
           maxLength: 256
+  responses:
+    Forbidden:
+      description: 403 — origin_not_allowed / insufficient_scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: insufficient_scope
+    InvalidPayload:
+      description: 400 invalid_payload — body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_payload
+            details:
+              fieldErrors:
+                event:
+                - Required
+    Unauthorized:
+      description: 401 — missing or invalid Bearer key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: invalid_api_key
   securitySchemes:
     bearerAuth:
       type: http
