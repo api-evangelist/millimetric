@@ -172,14 +172,18 @@ components:
           items:
             $ref: '#/components/schemas/TrackEventInput'
   responses:
-    ServerError:
-      description: 500 internal_error / 502 upstream_failed.
+    InvalidPayload:
+      description: 400 invalid_payload — body failed validation.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            error: internal_error
+            error: invalid_payload
+            details:
+              fieldErrors:
+                event:
+                - Required
     Forbidden:
       description: 403 — origin_not_allowed / insufficient_scope.
       content:
@@ -188,6 +192,14 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             error: insufficient_scope
+    ServerError:
+      description: 500 internal_error / 502 upstream_failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: internal_error
     RateLimited:
       description: 429 rate_limited — token bucket exhausted. Retry-After header included.
       headers:
@@ -202,18 +214,6 @@ components:
           example:
             error: rate_limited
             retry_after_s: 1
-    InvalidPayload:
-      description: 400 invalid_payload — body failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error: invalid_payload
-            details:
-              fieldErrors:
-                event:
-                - Required
     Unauthorized:
       description: 401 — missing or invalid Bearer key.
       content:
