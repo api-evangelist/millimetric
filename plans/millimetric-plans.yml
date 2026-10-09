@@ -66,3 +66,32 @@ custom:
   contact: hello@millimetric.ai
   note: Above 10M events/month, quoted by email. No published enterprise tier or price.
 limits_reference: rate-limits/millimetric-rate-limits.yml
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - subscription
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Pro
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Business
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
