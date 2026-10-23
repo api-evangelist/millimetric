@@ -128,6 +128,8 @@ apis:
   - type: APIReference
     url: https://docs.millimetric.ai/api-reference/overview
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/millimetric/overview
 - type: Website
   url: https://millimetric.ai
 - type: DeveloperPortal
