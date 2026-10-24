@@ -1,782 +1,861 @@
 {
+  "info": {
+    "_postman_id": "168c9701-4b6f-4222-88e5-39e93f46751a",
+    "name": "Millimetric Analytics Ingest API",
+    "description": "API-first, privacy-respecting analytics for developers, small startups, and AI agents. Capture events, identify users, run GDPR deletes, and query aggregated stats and attribution \u2014 no cookies, no dashboards required. All access is via Bearer API keys (pk_/sk_/rk_/ak_ kinds). Endpoints are versioned under /v1/*.\n\nContact Support:\n Name: Millimetric Support\n Email: hello@millimetric.ai",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:35:15.000Z",
+    "updatedAt": "2026-10-21T20:35:15.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-168c9701-4b6f-4222-88e5-39e93f46751a"
+  },
   "item": [
     {
-      "id": "c6f5b1ce-faef-4e8d-bffd-9c72cc0d96f0",
-      "name": "Ingest",
-      "description": {
-        "content": "Write events into a project.",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "d57b5983-b1a1-4b1f-ba84-5f5ae581aa35",
-          "name": "Emit a single analytics event",
-          "request": {
-            "name": "Emit a single analytics event",
-            "description": {
-              "content": "Emit a single analytics event — the most common write endpoint. Requires an ingest-scope key (pk_* browser, origin-checked; or sk_* server). The server enriches every event with source/medium classification, geo, device, and a hashed IP before insert.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "track"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"key_0\": 934.8182990375064,\n    \"key_1\": 5281\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "track",
+          "item": [
             {
-              "id": "c1fcfee5-0059-4815-a66e-c900b0432c51",
-              "name": "Accepted — event written to ClickHouse synchronously.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "track"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+              "name": "Emit a single analytics event",
+              "id": "5ee13ec0-8013-4f3c-8cfc-cf2e01c96c66",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
                 },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"event\": \"purchase\",\n  \"event_id\": \"evt_abc123\",\n  \"anonymous_id\": \"u_abc\",\n  \"user_id\": \"user_42\",\n  \"properties\": {\n    \"amount_cents\": 4900,\n    \"currency\": \"usd\"\n  }\n}",
+                  "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "Accepted",
-              "code": 202,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"ok\": true,\n  \"event_id\": \"evt_abc123\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3c19ff83-6831-4c91-a443-ac56f1f02b5c",
-              "name": "400 invalid_payload — body failed validation.",
-              "originalRequest": {
+                },
                 "url": {
-                  "path": [
-                    "v1",
-                    "track"
-                  ],
+                  "raw": "{{baseUrl}}/v1/track",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"event\": \"purchase\",\n  \"event_id\": \"evt_abc123\",\n  \"anonymous_id\": \"u_abc\",\n  \"user_id\": \"user_42\",\n  \"properties\": {\n    \"amount_cents\": 4900,\n    \"currency\": \"usd\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"invalid_payload\",\n  \"details\": {\n    \"fieldErrors\": {\n      \"event\": [\n        \"Required\"\n      ]\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "057cb004-9b61-4d94-8251-2a370451ac70",
-              "name": "401 — missing or invalid Bearer key.",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "v1",
                     "track"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"event\": \"purchase\",\n  \"event_id\": \"evt_abc123\",\n  \"anonymous_id\": \"u_abc\",\n  \"user_id\": \"user_42\",\n  \"properties\": {\n    \"amount_cents\": 4900,\n    \"currency\": \"usd\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Emit a single analytics event \u2014 the most common write endpoint. Requires an ingest-scope key (pk_* browser, origin-checked; or sk_* server). The server enriches every event with source/medium classification, geo, device, and a hashed IP before insert."
               },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "e6d36ae2-eaa4-4e71-8775-ce09974393ff",
+                  "name": "Accepted \u2014 event written to ClickHouse synchronously.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/track",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "track"
+                      ]
+                    }
+                  },
+                  "status": "Accepted",
+                  "code": 202,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"ok\": \"<boolean>\",\n  \"event_id\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-e6d36ae2-eaa4-4e71-8775-ce09974393ff"
+                },
+                {
+                  "id": "40f063b1-1045-43ea-831b-03177d2ae54c",
+                  "name": "400 invalid_payload \u2014 body failed validation.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/track",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "track"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-40f063b1-1045-43ea-831b-03177d2ae54c"
+                },
+                {
+                  "id": "ba2b565f-fd20-4e70-ba18-0ba267e252b2",
+                  "name": "401 \u2014 missing or invalid Bearer key.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/track",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "track"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-ba2b565f-fd20-4e70-ba18-0ba267e252b2"
+                },
+                {
+                  "id": "b728e4f9-bc4b-4eac-b4d3-181d7f4a426a",
+                  "name": "403 \u2014 origin_not_allowed / insufficient_scope.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/track",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "track"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-b728e4f9-bc4b-4eac-b4d3-181d7f4a426a"
+                },
+                {
+                  "id": "db0b85a7-bada-4716-8e87-d8c2008cc5c4",
+                  "name": "429 rate_limited \u2014 token bucket exhausted. Retry-After header included.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/track",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "track"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Seconds to wait before retrying.",
+                        "type": "text/plain"
+                      },
+                      "key": "Retry-After",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-db0b85a7-bada-4716-8e87-d8c2008cc5c4"
+                },
+                {
+                  "id": "62c64afe-49a0-4326-83a3-854bc31ada13",
+                  "name": "500 internal_error / 502 upstream_failed.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"event\": \"<string>\",\n  \"event_id\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"anonymous_id\": \"<string>\",\n  \"user_id\": \"<string>\",\n  \"session_id\": \"<string>\",\n  \"url\": \"<string>\",\n  \"path\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"properties\": {\n    \"cupidatatc29\": \"enim exercitation proident voluptate\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/track",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "track"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-62c64afe-49a0-4326-83a3-854bc31ada13"
                 }
               ],
-              "body": "{\n  \"error\": \"invalid_api_key\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e44930ad-96dc-4019-8753-9c852041cb98",
-              "name": "403 — origin_not_allowed / insufficient_scope.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "track"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"event\": \"purchase\",\n  \"event_id\": \"evt_abc123\",\n  \"anonymous_id\": \"u_abc\",\n  \"user_id\": \"user_42\",\n  \"properties\": {\n    \"amount_cents\": 4900,\n    \"currency\": \"usd\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"insufficient_scope\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5ea3d621-ff69-4fd4-b6d5-a6c493146762",
-              "name": "429 rate_limited — token bucket exhausted. Retry-After header included.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "track"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"event\": \"purchase\",\n  \"event_id\": \"evt_abc123\",\n  \"anonymous_id\": \"u_abc\",\n  \"user_id\": \"user_42\",\n  \"properties\": {\n    \"amount_cents\": 4900,\n    \"currency\": \"usd\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "Seconds to wait before retrying.",
-                  "key": "Retry-After",
-                  "value": "7884"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"rate_limited\",\n  \"retry_after_s\": 1\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "172bf82c-9b85-453a-8d05-230d7ffaea01",
-              "name": "500 internal_error / 502 upstream_failed.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "track"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"event\": \"purchase\",\n  \"event_id\": \"evt_abc123\",\n  \"anonymous_id\": \"u_abc\",\n  \"user_id\": \"user_42\",\n  \"properties\": {\n    \"amount_cents\": 4900,\n    \"currency\": \"usd\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"internal_error\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T20:35:15.000Z",
+              "updatedAt": "2026-10-21T20:35:15.000Z",
+              "uid": "35240-5ee13ec0-8013-4f3c-8cfc-cf2e01c96c66"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "10e9ca7c-3569-42ef-8c51-800ad92b66df",
+          "createdAt": "2026-10-21T20:35:15.000Z",
+          "updatedAt": "2026-10-21T20:35:15.000Z",
+          "uid": "35240-10e9ca7c-3569-42ef-8c51-800ad92b66df"
         },
         {
-          "id": "58f09ff0-fdcc-49c5-b790-4c571a0fd931",
-          "name": "Emit up to 1000 events in one call",
-          "request": {
-            "name": "Emit up to 1000 events in one call",
-            "description": {
-              "content": "Send up to 1000 events in a single request. All-or-nothing at the request level — if validation fails on any event, none are written. Used by the browser SDK for buffered flushes. Requires an ingest-scope key (pk_* or sk_*).",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "batch"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5632\n      }\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "batch",
+          "item": [
             {
-              "id": "26fd4b63-58b2-4ded-9f46-fe4cccfe6ee3",
-              "name": "Accepted — all events written.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "batch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+              "name": "Emit up to 1000 events in one call",
+              "id": "89d10c67-982c-454d-a098-e6035327d22c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
                 },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"string\",\n      \"event_id\": \"string\",\n      \"timestamp\": \"1957-04-07T14:38:17.310Z\",\n      \"anonymous_id\": \"string\",\n      \"user_id\": \"string\",\n      \"session_id\": \"string\",\n      \"url\": \"string\",\n      \"path\": \"string\",\n      \"referrer\": \"string\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5511.591223967363\n      }\n    }\n  ]\n}",
+                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "Accepted",
-              "code": 202,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"ok\": true,\n  \"count\": 2\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a1e57fd2-e1b6-4aa0-bede-f341f46f9c78",
-              "name": "400 invalid_payload — body failed validation.",
-              "originalRequest": {
+                },
                 "url": {
-                  "path": [
-                    "v1",
-                    "batch"
-                  ],
+                  "raw": "{{baseUrl}}/v1/batch",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"string\",\n      \"event_id\": \"string\",\n      \"timestamp\": \"1957-04-07T14:38:17.310Z\",\n      \"anonymous_id\": \"string\",\n      \"user_id\": \"string\",\n      \"session_id\": \"string\",\n      \"url\": \"string\",\n      \"path\": \"string\",\n      \"referrer\": \"string\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5511.591223967363\n      }\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"invalid_payload\",\n  \"details\": {\n    \"fieldErrors\": {\n      \"event\": [\n        \"Required\"\n      ]\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ca745578-6d47-4e80-8e0e-9e2633a693ce",
-              "name": "401 — missing or invalid Bearer key.",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "v1",
                     "batch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"string\",\n      \"event_id\": \"string\",\n      \"timestamp\": \"1957-04-07T14:38:17.310Z\",\n      \"anonymous_id\": \"string\",\n      \"user_id\": \"string\",\n      \"session_id\": \"string\",\n      \"url\": \"string\",\n      \"path\": \"string\",\n      \"referrer\": \"string\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5511.591223967363\n      }\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Send up to 1000 events in a single request. All-or-nothing at the request level \u2014 if validation fails on any event, none are written. Used by the browser SDK for buffered flushes. Requires an ingest-scope key (pk_* or sk_*)."
               },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "ef1eab29-9304-4d09-8481-6a4777a14fcd",
+                  "name": "Accepted \u2014 all events written.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/batch",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "batch"
+                      ]
+                    }
+                  },
+                  "status": "Accepted",
+                  "code": 202,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"ok\": \"<boolean>\",\n  \"count\": \"<integer>\"\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-ef1eab29-9304-4d09-8481-6a4777a14fcd"
+                },
+                {
+                  "id": "e5388d88-71ef-4b56-a9d9-3a33f93f82b7",
+                  "name": "400 invalid_payload \u2014 body failed validation.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/batch",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "batch"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-e5388d88-71ef-4b56-a9d9-3a33f93f82b7"
+                },
+                {
+                  "id": "ad85f87e-5fd8-460e-9fb2-e35242310c75",
+                  "name": "401 \u2014 missing or invalid Bearer key.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/batch",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "batch"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-ad85f87e-5fd8-460e-9fb2-e35242310c75"
+                },
+                {
+                  "id": "d727923c-7b6d-4432-912c-cd6d9952efb6",
+                  "name": "403 \u2014 origin_not_allowed / insufficient_scope.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/batch",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "batch"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-d727923c-7b6d-4432-912c-cd6d9952efb6"
+                },
+                {
+                  "id": "2a982788-776e-4d23-9337-19078962b202",
+                  "name": "429 rate_limited \u2014 token bucket exhausted. Retry-After header included.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/batch",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "batch"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Seconds to wait before retrying.",
+                        "type": "text/plain"
+                      },
+                      "key": "Retry-After",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-2a982788-776e-4d23-9337-19078962b202"
+                },
+                {
+                  "id": "6fca9233-045a-4a10-b185-620f28d10854",
+                  "name": "500 internal_error / 502 upstream_failed.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"events\": [\n    {\n      \"event\": \"<string>\",\n      \"event_id\": \"<string>\",\n      \"timestamp\": \"<dateTime>\",\n      \"anonymous_id\": \"<string>\",\n      \"user_id\": \"<string>\",\n      \"session_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"path\": \"<string>\",\n      \"referrer\": \"<string>\",\n      \"properties\": {\n        \"dolore_1da\": -35130817,\n        \"nostrud_33d\": true\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/batch",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "batch"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"details\": {\n    \"enim0f\": -37314353.5481363\n  }\n}",
+                  "createdAt": "2026-10-21T20:35:16.000Z",
+                  "updatedAt": "2026-10-21T20:35:16.000Z",
+                  "uid": "35240-6fca9233-045a-4a10-b185-620f28d10854"
                 }
               ],
-              "body": "{\n  \"error\": \"invalid_api_key\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "62abc103-57dd-49d0-8a84-bc5dfd6b046d",
-              "name": "403 — origin_not_allowed / insufficient_scope.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "batch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"string\",\n      \"event_id\": \"string\",\n      \"timestamp\": \"1957-04-07T14:38:17.310Z\",\n      \"anonymous_id\": \"string\",\n      \"user_id\": \"string\",\n      \"session_id\": \"string\",\n      \"url\": \"string\",\n      \"path\": \"string\",\n      \"referrer\": \"string\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5511.591223967363\n      }\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"insufficient_scope\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ed16ae18-f632-41af-a12e-1b0f2505a3e6",
-              "name": "429 rate_limited — token bucket exhausted. Retry-After header included.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "batch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"string\",\n      \"event_id\": \"string\",\n      \"timestamp\": \"1957-04-07T14:38:17.310Z\",\n      \"anonymous_id\": \"string\",\n      \"user_id\": \"string\",\n      \"session_id\": \"string\",\n      \"url\": \"string\",\n      \"path\": \"string\",\n      \"referrer\": \"string\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5511.591223967363\n      }\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "Seconds to wait before retrying.",
-                  "key": "Retry-After",
-                  "value": "7884"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"rate_limited\",\n  \"retry_after_s\": 1\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "7335b865-0060-48d8-98b5-1ed3c5abe89e",
-              "name": "500 internal_error / 502 upstream_failed.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "batch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"events\": [\n    {\n      \"event\": \"string\",\n      \"event_id\": \"string\",\n      \"timestamp\": \"1957-04-07T14:38:17.310Z\",\n      \"anonymous_id\": \"string\",\n      \"user_id\": \"string\",\n      \"session_id\": \"string\",\n      \"url\": \"string\",\n      \"path\": \"string\",\n      \"referrer\": \"string\",\n      \"properties\": {\n        \"key_0\": true,\n        \"key_1\": 5511.591223967363\n      }\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"internal_error\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T20:35:15.000Z",
+              "updatedAt": "2026-10-21T20:35:15.000Z",
+              "uid": "35240-89d10c67-982c-454d-a098-e6035327d22c"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "a93dcefc-9619-4dd8-a661-e0e0583d9223",
+          "createdAt": "2026-10-21T20:35:15.000Z",
+          "updatedAt": "2026-10-21T20:35:15.000Z",
+          "uid": "35240-a93dcefc-9619-4dd8-a661-e0e0583d9223"
         }
       ],
-      "event": []
+      "id": "dd8457b5-12c7-4e23-bdd3-3e167a2a762a",
+      "createdAt": "2026-10-21T20:35:15.000Z",
+      "updatedAt": "2026-10-21T20:35:15.000Z",
+      "uid": "35240-dd8457b5-12c7-4e23-bdd3-3e167a2a762a"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.millimetric.ai",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.millimetric.ai"
     }
-  ],
-  "info": {
-    "_postman_id": "b6489e2b-7401-4b93-a25a-a083efe3692b",
-    "name": "Millimetric Analytics Identity Ingest API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "API-first, privacy-respecting analytics for developers, small startups, and AI agents. Capture events, identify users, run GDPR deletes, and query aggregated stats and attribution — no cookies, no dashboards required. All access is via Bearer API keys (pk_/sk_/rk_/ak_ kinds). Endpoints are versioned under /v1/*.\n\nContact Support:\n Name: Millimetric Support\n Email: hello@millimetric.ai",
-      "type": "text/plain"
-    }
-  }
+  ]
 }
