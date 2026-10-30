@@ -64,10 +64,142 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Millimetric is API-first, privacy-respecting web and product analytics for developers, indie startups ("vibe coders"), and AI agents. It captures events over a simple REST API (`/v1/track`, `/v1/batch`, `/v1/identify`, `/v1/query`, `/v1/stats`, `/v1/sources`), a ~1.8 KB browser SDK, and a zero-dependency Node SDK, with a built-in attribution classifier that splits paid vs organic social traffic. No cookies, no raw IPs (GDPR/CCPA compliant, `/v1/forget` right-to-be-forgotten), and a first-class hosted Model Context Protocol (MCP) server for AI agents.
+Millimetric is API-first, privacy-respecting web and product analytics for developers, indie startups ("vibe coders"), and AI agents. It captures events over a simple REST API (/v1/track, /v1/batch, /v1/identify, /v1/query, /v1/stats, /v1/sources), a ~1.8 KB browser SDK, and a zero-dependency Node SDK, with a built-in attribution classifier that splits paid versus organic social traffic (the Facebook social-vs-paid split). It stores no cookies and no raw IPs — GDPR/CCPA compliant, with a /v1/forget right-to-be-forgotten endpoint — and ships a first-class hosted Model Context Protocol (MCP) server so AI agents emit and query analytics natively. Backed by Seedcamp.
 
-- Website: https://millimetric.ai
-- Docs: https://docs.millimetric.ai
-- API reference: https://docs.millimetric.ai/api-reference/overview
-- MCP server: https://api.millimetric.ai/mcp
-- Backed by: Seedcamp
+**Areas:** Company · Analytics · Web Analytics · Product Analytics · Attribution · Privacy · MCP · AI Agents · Event · Developer Tools
+
+## Millimetric on APIs.io
+
+Everything profiled for Millimetric is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/millimetric/](https://apis.io/providers/millimetric/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Millimetric Identity API](https://apis.io/apis/millimetric/millimetric-identity-api/) — Link anonymous visitors to known users and honor deletion requests.
+- [Millimetric Ingest API](https://apis.io/apis/millimetric/millimetric-ingest-api/) — Write events into a project.
+- [Millimetric Read API](https://apis.io/apis/millimetric/millimetric-read-api/) — Query raw events and aggregated stats and attribution.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Arazzo workflows (3)
+
+Multi-step workflows that chain operations into a business task.
+
+- [Stitch an anonymous visitor to a known user](https://apis.io/arazzos/millimetric/millimetric-anonymous-to-known/)
+- [Capture an event and analyze traffic sources](https://apis.io/arazzos/millimetric/millimetric-capture-and-analyze/)
+- [GDPR right-to-be-forgotten](https://apis.io/arazzos/millimetric/millimetric-gdpr-delete/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [millimetric-mcp.yml](https://apis.io/servers/millimetric/millimetric-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Millimetric Agentic Access](https://apis.io/agentic-access/millimetric/millimetric-agentic-access/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [Millimetric Analytics Identity API](https://apis.io/collections/millimetric/open-millimetric-identity-api/)
+- [Millimetric Analytics Identity Ingest API](https://apis.io/collections/millimetric/open-millimetric-ingest-api/)
+- [Millimetric Analytics Identity Read API](https://apis.io/collections/millimetric/open-millimetric-read-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Millimetric Openapi Overlay](https://apis.io/overlays/millimetric/millimetric-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Millimetric Authentication](https://apis.io/security/millimetric/millimetric-authentication/)
+- [Millimetric Domain Security](https://apis.io/security/millimetric/millimetric-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Millimetric Plans](https://apis.io/plans/millimetric/millimetric-plans/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Millimetric Rate Limits](https://apis.io/rate-limits/millimetric/millimetric-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://millimetric.ai)
+- [Documentation](https://docs.millimetric.ai)
+- [Getting started](https://docs.millimetric.ai/quickstart)
+- [API reference](https://docs.millimetric.ai/api-reference/overview)
+- [Pricing](https://millimetric.ai/#pricing)
+- [Sign up](https://millimetric.ai/signup)
+- [Compliance](https://millimetric.ai/legal/dpa)
+- [Terms of service](https://millimetric.ai/legal/terms)
+- [Privacy policy](https://millimetric.ai/legal/privacy)
+
+## API Evangelist rating
+
+**Kin Score 44.5** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 14.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 21.1 |
+| Developer ergonomics | 63.7 |
+| Access clarity | 78.9 |
+
+**Agent readiness 48.8** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | verified |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/millimetric/](https://apis.io/providers/millimetric/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Millimetric: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/millimetric/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
